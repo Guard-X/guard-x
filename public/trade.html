@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Trades | Game Trade Marketplace</title>
+    <link rel="stylesheet" href="trade.css">
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <a href="dashboard.html" class="home-btn">
+                <i class="fas fa-home"></i> Back to Dashboard
+            </a>
+            <h1><i class="fas fa-gamepad"></i> My Game Trades</h1>
+            <a href="browse-trades.html" class="browse-trades-btn">
+                <i class="fas fa-search"></i> Browse Trades
+            </a>
+        </div>
+    </header>
+
+    <main>
+        <section class="trade-form-section">
+            <h2><i class="fas fa-plus-circle"></i> Create New Trade</h2>
+            <form id="trade-form">
+                <div class="form-group">
+                    <label for="game-name">Game Name*</label>
+                    <input type="text" id="game-name" placeholder="Which game is this for?" required maxlength="100">
+                </div>
+                
+                <div class="form-group">
+                    <label for="item-name">Item Name*</label>
+                    <input type="text" id="item-name" placeholder="What are you trading?" required maxlength="100">
+                </div>
+                
+                <div class="form-group">
+                    <label for="item-description">Description*</label>
+                    <textarea id="item-description" placeholder="Describe your item..." required maxlength="1000"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="item-price">Price (optional)</label>
+                    <input type="text" id="item-price" placeholder="e.g., 100 gold, $20, or Trade for..." maxlength="100">
+                </div>
+                
+                <button type="submit">
+                    <i class="fas fa-plus-circle"></i> Post Trade
+                </button>
+            </form>
+        </section>
+
+        <section class="trade-posts-section">
+        <h2><i class="fas fa-list"></i> My Active Trades</h2>
+        <div id="trade-posts-list" class="trade-posts-grid">
+            <!-- Trade items will be inserted here by JavaScript -->
+        </div>
+        </section>
+    </main>
+
+    <!-- Comment Modal -->
+    <div id="comment-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h3>Comments on <span id="trade-item-title"></span></h3>
+            <div id="comments-container"></div>
+            <form id="comment-form">
+                <textarea id="comment-text" placeholder="Write your comment..." required></textarea>
+                <button type="submit"><i class="fas fa-paper-plane"></i> Post Comment</button>
+            </form>
+        </div>
+    </div>
+
+    <script type="module" src="js/auth/trade.js"></script>
+    <script>
+        function renderTrade(tradeData, docSnap, createdAt, priceDisplay) {
+            const tradeElement = document.createElement('div');
+            tradeElement.classList.add('trade-item');
+            tradeElement.innerHTML = `
+                <div class="shine"></div>
+                <h3>${tradeData.gameName || 'Various Games'}</h3>
+                <h4>${tradeData.itemName}</h4>
+                ${priceDisplay}
+                <p>${tradeData.description}</p>
+                <small>Posted: ${createdAt.toLocaleString()}</small>
+                <div class="trade-meta">
+                    <button class="comment-btn" data-id="${docSnap.id}">
+                        <i class="fas fa-comments"></i> Comments
+                    </button>
+                    <button class="delete-btn" data-id="${docSnap.id}">
+                        <i class="fas fa-trash"></i> Delete
+                    </button>
+                </div>
+            `;
+            return tradeElement;
+        }
+    </script>
+</body>
+</html>

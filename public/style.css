@@ -1,0 +1,330 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Orbitron', sans-serif;
+}
+
+body {
+    background: #0a0a1e url('https://wallpapercave.com/wp/wp2634221.jpg') no-repeat center center/cover;
+    background-size: cover;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    text-align: center;
+}
+
+.title-container {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.title {
+    font-size: 40px;
+    font-weight: bold;
+    text-transform: uppercase;
+    background: linear-gradient(90deg, #00C2FF, #A65EFF);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: 0 0 15px rgba(166, 94, 255, 0.9);
+    display: inline-block;
+    animation: float 3s ease-in-out infinite, glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+}
+
+@keyframes glow {
+    from { text-shadow: 0 0 15px rgba(166, 94, 255, 0.9); }
+    to { text-shadow: 0 0 25px rgba(166, 94, 255, 1), 0 0 35px rgba(0, 194, 255, 0.7); }
+}
+
+.form-box {
+    background: rgba(20, 20, 50, 0.9);
+    padding: 25px;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 350px;
+    box-shadow: 0 0 15px rgba(0, 194, 255, 0.8);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+h2 {
+    color: #A65EFF;
+    margin-bottom: 15px;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 2px solid #00C2FF;
+    border-radius: 5px;
+    background: rgba(10, 10, 30, 0.9);
+    color: white;
+    font-size: 16px;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+input:focus {
+    outline: none;
+    border-color: #A65EFF;
+    box-shadow: 0 0 10px rgba(166, 94, 255, 0.7);
+}
+
+input::placeholder {
+    color: #A65EFF;
+    opacity: 0.7;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 15px;
+    border: none;
+    border-radius: 5px;
+    background: linear-gradient(90deg, #00C2FF, #A65EFF);
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 15px rgba(166, 94, 255, 0.9);
+}
+
+button:hover {
+    transform: scale(1.02);
+    box-shadow: 0 0 20px rgba(166, 94, 255, 1);
+}
+
+button:active {
+    transform: scale(0.98);
+}
+
+p {
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+p a {
+    color: #00C2FF;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+p a:hover {
+    text-decoration: underline;
+    text-shadow: 0 0 8px rgba(0, 194, 255, 0.6);
+}
+
+@media (max-width: 480px) {
+    .form-box {
+        padding: 20px;
+    }
+}
+
+/* Dashboard Layout */
+.dashboard-container {
+    display: grid;
+    grid-template-columns: 250px 1fr;
+    gap: 20px;
+    width: 100%;
+}
+
+.sidebar {
+    background: rgba(30, 30, 60, 0.8);
+    padding: 20px;
+    border-radius: 10px;
+    color: white;
+    height: 100%;
+    box-shadow: 0 0 15px rgba(0, 194, 255, 0.8);
+}
+
+.main-content {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    gap: 20px;
+}
+
+.tab-buttons {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.tab-content {
+    background: rgba(20, 20, 50, 0.9);
+    padding: 20px;
+    border-radius: 10px;
+    min-height: 300px;
+    color: white;
+    box-shadow: 0 0 15px rgba(0, 194, 255, 0.8);
+}
+
+.trade-card {
+    background: rgba(40, 40, 80, 0.7);
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    color: white;
+    box-shadow: 0 0 10px rgba(166, 94, 255, 0.7);
+}
+
+.chat-container {
+    display: grid;
+    grid-template-rows: 1fr auto;
+    height: 400px;
+}
+
+.messages {
+    overflow-y: auto;
+    margin-bottom: 15px;
+}
+
+.message-input {
+    display: flex;
+    gap: 10px;
+}
+
+#notification-bell {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    cursor: pointer;
+    color: white;
+}
+
+.trade-status {
+    padding: 4px 8px;
+    border-radius: 4px;
+    display: inline-block;
+    font-weight: bold;
+}
+
+.status-available {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.status-pending {
+    background-color: #ffcc00;
+    color: #000;
+}
+
+.status-completed {
+    background-color: #2196F3;
+    color: white;
+}
+
+.status-cancelled {
+    background-color: #f44336;
+    color: white;
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    border-radius: 8px;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover {
+    color: black;
+}
+
+button {
+    cursor: pointer;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    background-color: #4CAF50;
+    color: white;
+    margin: 5px;
+}
+
+button:hover {
+    opacity: 0.8;
+}
+
+button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+.request-trade-btn {
+    background-color: #2196F3;
+}
+
+.cancel-trade-btn {
+    background-color: #f44336;
+}
+
+.complete-trade-btn {
+    background-color: #9C27B0;
+}
+
+input, textarea, select {
+    padding: 8px;
+    margin: 5px 0;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.message {
+    margin: 8px 0;
+    padding: 8px 12px;
+    border-radius: 8px;
+    max-width: 70%;
+}
+
+.message.sent {
+    background-color: #4CAF50;
+    margin-left: auto;
+    text-align: right;
+}
+
+.message.received {
+    background-color: #3F51B5;
+    margin-right: auto;
+}
+
+.loading {
+    color: white;
+    text-align: center;
+    padding: 20px;
+}

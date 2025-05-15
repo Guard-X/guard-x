@@ -1,0 +1,524 @@
+/* Galaxy/Space Theme Styles */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
+:root {
+    --primary-color: #A65EFF;
+    --secondary-color: #00C2FF;
+    --accent-color: #4fc3f7;
+    --background-color: #0a0a1e;
+    --card-color: rgba(20, 20, 50, 0.85);
+    --text-color: #fff;
+    --border-radius: 12px;
+    --box-shadow: 0 4px 15px rgba(0, 194, 255, 0.3);
+    --success-color: #2ecc71;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Orbitron', sans-serif;
+}
+
+body {
+    background: #0a0a1e url('https://wallpapercave.com/wp/wp2634221.jpg') no-repeat center center/cover;
+    background-size: cover;
+    color: var(--text-color);
+    min-height: 100vh;
+}
+
+header {
+    background: rgba(10,10,30,0.95);
+    color: white;
+    padding: 1.5rem 0 1rem 0;
+    box-shadow: var(--box-shadow);
+}
+
+.header-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.home-btn, .my-trades-btn {
+    color: white;
+    text-decoration: none;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: linear-gradient(90deg, #00C2FF, #A65EFF);
+    padding: 10px 18px;
+    border-radius: 6px;
+    transition: background 0.3s, transform 0.2s;
+    font-weight: bold;
+    box-shadow: 0 0 10px rgba(166, 94, 255, 0.7);
+    border: none;
+    cursor: pointer;
+}
+
+.home-btn:hover, .my-trades-btn:hover {
+    background: linear-gradient(90deg, #A65EFF, #00C2FF);
+    transform: scale(1.05);
+}
+
+header h1 {
+    font-size: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: linear-gradient(90deg, #00C2FF, #A65EFF);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: 0 0 10px rgba(166, 94, 255, 0.9);
+    font-weight: bold;
+}
+
+main {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 2rem;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 2rem;
+}
+
+.trade-form-section, .trade-posts-section {
+    background: var(--card-color);
+    padding: 2rem 1.5rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    margin-bottom: 2rem;
+}
+
+.trade-form-section h2, .trade-posts-section h2 {
+    margin-bottom: 1.5rem;
+    color: var(--secondary-color);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.5rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #A65EFF;
+}
+
+.form-group input[type="text"],
+.form-group textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #333;
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    background: rgba(10,10,30,0.7);
+    color: #fff;
+    transition: border-color 0.3s;
+}
+
+.form-group input[type="text"]:focus,
+.form-group textarea:focus {
+    border-color: var(--secondary-color);
+    outline: none;
+}
+
+.form-group textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.submit-btn, button[type="submit"] {
+    background: linear-gradient(90deg, #00C2FF, #A65EFF);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-weight: bold;
+    box-shadow: 0 0 10px rgba(166, 94, 255, 0.7);
+}
+
+.submit-btn:hover, button[type="submit"]:hover {
+    background: linear-gradient(90deg, #A65EFF, #00C2FF);
+    transform: scale(1.03);
+}
+
+/* --- Enhanced Active Trades Box/Card UI --- */
+.trade-posts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 2rem;
+    margin-top: 1.5rem;
+}
+
+.trade-item, .trade-post {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, rgba(30,30,60,0.98) 80%, rgba(0,194,255,0.10));
+    border-radius: var(--border-radius);
+    padding: 1.7rem 1.3rem 1.3rem 1.3rem;
+    box-shadow: 0 0 32px 4px #A65EFF55, 0 2px 32px 0 #00C2FF33;
+    border: 3px solid;
+    border-image: linear-gradient(180deg, #00C2FF 0%, #A65EFF 100%);
+    border-image-slice: 1;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1.5rem;
+    z-index: 1;
+    transition: box-shadow 0.3s, border 0.3s, transform 0.3s;
+}
+
+.trade-item:hover, .trade-post:hover {
+    box-shadow: 0 0 48px 12px #00C2FF99, 0 0 32px #A65EFF99;
+    transform: translateY(-8px) scale(1.025);
+    border-image: linear-gradient(180deg, #A65EFF 0%, #00C2FF 100%);
+    border-image-slice: 1;
+}
+
+.trade-item::before, .trade-post::before {
+    content: "";
+    position: absolute;
+    inset: -3px;
+    z-index: 0;
+    border-radius: inherit;
+    background: linear-gradient(120deg, #00C2FF 0%, #A65EFF 100%);
+    opacity: 0.18;
+    filter: blur(8px);
+    pointer-events: none;
+    transition: opacity 0.3s;
+}
+
+.trade-item:hover::before, .trade-post:hover::before {
+    opacity: 0.32;
+    filter: blur(12px);
+}
+
+.trade-item .shine, .trade-post .shine {
+    position: absolute;
+    top: -40%;
+    left: -60%;
+    width: 200%;
+    height: 180%;
+    background: linear-gradient(120deg, transparent 60%, #fff 80%, transparent 100%);
+    opacity: 0.07;
+    transform: rotate(8deg);
+    pointer-events: none;
+    z-index: 1;
+    animation: shineMove 3.5s linear infinite;
+}
+
+@keyframes shineMove {
+    0% { left: -60%; }
+    100% { left: 100%; }
+}
+
+/* Add a subtle left accent column */
+.trade-item::after, .trade-post::after {
+    content: "";
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 8px;
+    border-radius: 8px 0 0 8px;
+    background: linear-gradient(180deg, #00C2FF 0%, #A65EFF 100%);
+    opacity: 0.85;
+    z-index: 2;
+    transition: opacity 0.3s;
+}
+
+.trade-item:hover::after, .trade-post:hover::after {
+    opacity: 1;
+}
+
+.trade-post h3 {
+    color: var(--secondary-color);
+    margin-bottom: 0.5rem;
+    font-size: 1.25rem;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    z-index: 3;
+    position: relative;
+}
+
+.game-name {
+    font-weight: bold;
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+    z-index: 3;
+    position: relative;
+}
+
+.price-tag {
+    display: inline-block;
+    background: linear-gradient(90deg, #2ecc71, #00C2FF);
+    color: white;
+    padding: 0.25rem 0.7rem;
+    border-radius: 4px;
+    font-weight: bold;
+    margin: 0.5rem 0;
+    font-size: 1rem;
+    box-shadow: 0 0 8px #2ecc71;
+    z-index: 3;
+    position: relative;
+}
+
+.trade-post .description {
+    margin: 1rem 0;
+    color: #bdbdf7;
+    font-size: 1rem;
+    line-height: 1.5;
+    z-index: 3;
+    position: relative;
+}
+
+.trade-meta {
+    font-size: 0.93rem;
+    color: #aaa;
+    margin-top: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 3;
+    position: relative;
+}
+
+.trade-meta .date {
+    font-size: 0.85rem;
+    color: #888;
+}
+
+.comment-btn {
+    background: linear-gradient(90deg, #A65EFF, #00C2FF);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 0.5rem 1.1rem;
+    font-size: 1rem;
+    font-weight: bold;
+    margin-left: 1rem;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+    box-shadow: 0 0 8px #A65EFF;
+    z-index: 3;
+    position: relative;
+}
+
+.comment-btn:hover {
+    background: linear-gradient(90deg, #00C2FF, #A65EFF);
+    transform: scale(1.05);
+}
+
+.delete-btn {
+    background: linear-gradient(90deg, #ff4d4d, #A65EFF);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 0.5rem 1.1rem;
+    font-size: 1rem;
+    font-weight: bold;
+    margin-top: 1rem;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+    box-shadow: 0 0 8px #ff4d4d55;
+    align-self: flex-end;
+    z-index: 3;
+    position: relative;
+}
+
+.delete-btn:hover {
+    background: linear-gradient(90deg, #A65EFF, #ff4d4d);
+    transform: scale(1.05);
+}
+
+.comments-preview {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    z-index: 3;
+    position: relative;
+}
+
+.comment {
+    background: rgba(40, 40, 70, 0.95);
+    border-radius: 8px;
+    padding: 0.7rem 1rem;
+    color: #fff;
+    box-shadow: 0 0 8px #A65EFF33;
+    font-size: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    border: 2px solid #A65EFF;
+    margin-bottom: 0.5rem;
+}
+
+.reply-btn {
+    align-self: flex-end;
+    margin-top: 0.3rem;
+    background: linear-gradient(90deg, #00C2FF, #A65EFF);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 0.3rem 0.9rem;
+    font-size: 0.95rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+    box-shadow: 0 0 6px #A65EFF;
+}
+.reply-btn:hover {
+    background: linear-gradient(90deg, #A65EFF, #00C2FF);
+    transform: scale(1.05);
+}
+
+.no-trades {
+    color: #aaa;
+    text-align: center;
+    margin: 2rem 0;
+}
+
+@media (max-width: 900px) {
+    main {
+        grid-template-columns: 1fr;
+        padding: 0 1rem;
+    }
+    .header-container {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    .modal-content {
+        width: 90vw;
+        min-width: unset;
+        max-width: 98vw;
+        max-height: 80vh;
+        padding: 1.2rem 0.5rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .trade-form-section, .trade-posts-section {
+        padding: 1rem 0.5rem;
+    }
+    .trade-posts-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0; top: 0;
+    width: 100vw; height: 100vh;
+    background: rgba(10,10,30,0.85);
+    justify-content: center;
+    align-items: center;
+}
+.modal.active { display: flex; }
+/* Or browse-trades.css if you want it for browse as well */
+.modal-content {
+    background: var(--card-color);
+    border-radius: var(--border-radius);
+    box-shadow: 0 0 24px #A65EFF;
+    padding: 2rem 1.5rem 1.5rem 1.5rem;
+    width: 25vw;              /* 1/4 of the viewport width */
+    min-width: 320px;
+    max-width: 420px;
+    max-height: 60vh;         /* Limit height for scroll */
+    position: relative;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    animation: modalPop 0.3s;
+    margin: auto;
+    overflow-y: auto;
+    align-items: center;
+    justify-content: center;
+}
+.close-modal {
+    position: absolute;
+    top: 1.2rem;
+    right: 1.5rem;
+    font-size: 1.5rem;
+    color: var(--secondary-color);
+    cursor: pointer;
+    transition: color 0.2s;
+}
+.close-modal:hover { color: var(--primary-color); }
+#trade-item-title { color: var(--secondary-color); font-weight: bold; }
+#comments-container {
+    max-height: 240px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* Add to both browse-trades.css and trade.css */
+.reply {
+    background: rgba(30, 30, 60, 0.85);
+    border-radius: 7px;
+    padding: 0.5rem 1rem;
+    color: #fff;
+    border: 2px solid #00C2FF;
+    margin: 0.3rem 0 0.3rem 1.5rem;
+    font-size: 0.97rem;
+    box-shadow: 0 0 6px #00C2FF33;
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+}
+.reply-user {
+    color: var(--secondary-color);
+    font-weight: bold;
+    margin-right: 0.5rem;
+}
+.reply-form textarea {
+    width: 100%;
+    border-radius: 6px;
+    border: 1px solid #333;
+    background: rgba(10,10,30,0.8);
+    color: #fff;
+    font-size: 1rem;
+    padding: 0.4rem;
+    margin-bottom: 0.3rem;
+    resize: vertical;
+}
+.reply-form button {
+    background: linear-gradient(90deg, #00C2FF, #A65EFF);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 0.3rem 0.9rem;
+    font-size: 0.95rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+    box-shadow: 0 0 6px #A65EFF;
+}
+.reply-form button:hover {
+    background: linear-gradient(90deg, #A65EFF, #00C2FF);
+    transform: scale(1.05);
+}

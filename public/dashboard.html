@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <!-- Add icon library -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="header-left">
+            <h1>Welcome, <span id="username">Guest</span></h1>
+        </div>
+        <div class="header-right">
+            <button id="profile-btn" class="icon-btn" title="Profile">
+                <i class="fas fa-user"></i>
+            </button>
+            <button id="settings-btn" class="icon-btn" title="Settings">
+                <i class="fas fa-cog"></i>
+            </button>
+            <button id="friends-btn" class="icon-btn" title="Friends">
+                <i class="fas fa-user-friends"></i>
+            </button>
+            <button id="notification-btn" class="icon-btn" title="Notifications">
+                <i class="fas fa-bell"></i>
+                <span id="notification-badge" style="display:none;">0</span>
+            </button>
+            <div id="notification-list" class="notification-list" style="display:none;"></div>
+            <button id="logout-btn" class="icon-btn" title="Logout">
+                <i class="fas fa-sign-out-alt"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Rest of your existing HTML remains the same -->
+
+    <main class="dashboard-content">
+        <section id="add-trade">
+            <h2>Add Trade</h2>
+            <p>Create a new trade post to share your items with others.</p>
+            <button onclick="window.location.href = 'trade.html';">Go to My Trades</button>
+        </section>
+
+        <section id="view-trades">
+            <h2>Available Trades</h2>
+            <p>Click here to explore available trades or items shared by users.</p>
+            <button onclick="window.location.href = 'browse-trades.html';">Go to Trades</button>
+        </section>
+
+        <section id="chat-area">
+            <h2>Chat</h2>
+            <p>Click below to open the chat interface.</p>
+            <button onclick="alert('Opening chat...')">Go to Chat</button>
+        </section>
+    </main>
+
+    <script type="module" src="/public/js/auth/firebase-init.js"></script>
+    <script type="module" src="js/auth/main.js"></script>
+    <script type="module" src="js/auth/dashboard.js"></script>
+</body>
+</html>

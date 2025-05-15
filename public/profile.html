@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Profile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <style>
+        .profile-container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .profile-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 20px;
+            overflow: hidden;
+        }
+        
+        .avatar i {
+            font-size: 50px;
+            color: #666;
+        }
+        
+        .profile-info {
+            flex: 1;
+        }
+        
+        .profile-actions {
+            margin-top: 30px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        
+        .btn-primary {
+            background-color: #4285f4;
+            color: white;
+        }
+        
+        .btn-secondary {
+            background-color: #f1f1f1;
+            color: #333;
+        }
+        
+        .back-btn {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-left">
+            <button class="back-btn" onclick="window.history.back()">
+                <i class="fas fa-arrow-left"></i> Back
+            </button>
+        </div>
+        <div class="header-right">
+            <button id="logout-btn" class="icon-btn" title="Logout">
+                <i class="fas fa-sign-out-alt"></i>
+            </button>
+        </div>
+    </header>
+
+    <main class="profile-container">
+        <div class="profile-header">
+            <div class="avatar">
+                <i class="fas fa-user"></i>
+            </div>
+            <div class="profile-info">
+                <h1 id="profile-username">Loading...</h1>
+                <p id="profile-email"></p>
+                <p id="member-since"></p>
+            </div>
+        </div>
+        
+        <div class="profile-details">
+            <h2>Account Details</h2>
+            <div id="user-details">
+                <!-- Details will be loaded here -->
+            </div>
+        </div>
+        
+        <div class="profile-actions">
+            <button class="btn btn-primary" id="edit-profile-btn">
+                <i class="fas fa-edit"></i> Edit Profile
+            </button>
+        </div>
+    </main>
+
+    <script type="module">
+        import { auth } from './firebase-init.js';
+        import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-auth.js";
+
+        // Load profile data
+        function loadProfileData(user) {
+            document.getElementById('profile-username').textContent = user.displayName || 'User';
+            document.getElementById('profile-email').textContent = user.email;
+            
+            const creationDate = new Date(user.metadata.creationTime);
+            document.getElementById('member-since').textContent = `Member since ${creationDate.toLocaleDateString()}`;
+            
+            // Setup logout button
+            document.getElementById('logout-btn').addEventListener('click', async () => {
+                try {
+                    await signOut(auth);
+                    window.location.href = "index.html";
+                } catch (error) {
+                    console.error("Logout error:", error);
+                    alert("Error during logout. Please try again.");
+                }
+            });
+            
+            // Setup action buttons
+            document.getElementById('edit-profile-btn').addEventListener('click', () => {
+                alert('Edit profile functionality will be added soon!');
+            });
+            
+        }
+
+        // Check auth state
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                loadProfileData(user);
+            } else {
+                window.location.href = "index.html";
+            }
+        });
+    </script>
+</body>
+</html>

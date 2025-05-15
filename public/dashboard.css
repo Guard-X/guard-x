@@ -1,0 +1,196 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Orbitron', sans-serif;
+}
+
+body {
+    background: #0a0a1e url('https://wallpapercave.com/wp/wp2634221.jpg') no-repeat center center/cover;
+    background-size: cover;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.header-left h1 {
+    font-size: 28px;
+    font-weight: bold;
+    text-transform: uppercase;
+    background: linear-gradient(90deg, #00C2FF, #A65EFF);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: 0 0 10px rgba(166, 94, 255, 0.9);
+}
+
+.header-right button {
+    padding: 10px 15px;
+    background-color: #A65EFF;
+    border: none;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.header-right button:hover {
+    background-color: #00C2FF;
+    box-shadow: 0 0 10px rgba(0, 194, 255, 0.7);
+}
+
+.top-nav {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.top-nav button {
+    background: rgba(0, 194, 255, 0.8);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.top-nav button:hover {
+    background: rgba(166, 94, 255, 0.8);
+    box-shadow: 0 0 10px rgba(0, 194, 255, 0.7);
+}
+
+.dashboard-content {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    padding: 0 20px;
+    width: 100%;
+}
+
+section {
+    background: rgba(20, 20, 50, 0.8);
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 194, 255, 0.3);
+}
+
+h2 {
+    font-size: 24px;
+    color: #A65EFF;
+    margin-bottom: 15px;
+}
+
+p {
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+button {
+    background: linear-gradient(90deg, #00C2FF, #A65EFF);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px rgba(166, 94, 255, 0.9);
+}
+
+button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(166, 94, 255, 1);
+}
+
+button:active {
+    transform: scale(0.98);
+}
+
+#notification-badge {
+    background: #ff4d4d;
+    color: #fff;
+    border-radius: 50%;
+    padding: 2px 7px;
+    font-size: 0.8rem;
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    z-index: 2;
+    font-weight: bold;
+    display: none;
+}
+
+#notification-btn {
+    position: relative;
+}
+
+.notification-list {
+    position: absolute;
+    top: 48px;
+    right: 10px;
+    background: #181840;
+    color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 18px #A65EFF88;
+    min-width: 260px;
+    max-width: 340px;
+    z-index: 1002;
+    padding: 0.7rem 0.5rem;
+}
+
+.notification-item {
+    padding: 0.6rem 0.3rem;
+    border-bottom: 1px solid #333;
+    font-size: 0.97rem;
+}
+
+.notification-item:last-child {
+    border-bottom: none;
+}
+
+.notification-item.read {
+    opacity: 0.6;
+    background: #22224a;
+}
+
+@media (max-width: 768px) {
+    .top-nav {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .dashboard-content {
+        padding: 0 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .header-left h1 {
+        font-size: 22px;
+    }
+
+    .top-nav button {
+        padding: 8px 15px;
+        font-size: 14px;
+    }
+
+    .dashboard-content {
+        padding: 0 10px;
+    }
+}

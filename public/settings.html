@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Settings</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <style>
+        .settings-container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .settings-section {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .settings-section:last-child {
+            border-bottom: none;
+        }
+        
+        .settings-option {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .option-info {
+            flex: 1;
+        }
+        
+        .option-info h3 {
+            margin: 0 0 5px 0;
+        }
+        
+        .option-info p {
+            margin: 0;
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        
+        .btn-primary {
+            background-color: #4285f4;
+            color: white;
+        }
+        
+        .back-btn {
+            margin-bottom: 20px;
+        }
+        
+        /* Password change form (hidden by default) */
+        #password-change-form {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 5px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-left">
+            <button class="back-btn" onclick="window.history.back()">
+                <i class="fas fa-arrow-left"></i> Back
+            </button>
+        </div>
+        <div class="header-right">
+            <button id="logout-btn" class="icon-btn" title="Logout">
+                <i class="fas fa-sign-out-alt"></i>
+            </button>
+        </div>
+    </header>
+
+    <main class="settings-container">
+        <h1>Account Settings</h1>
+        
+        <div class="settings-section">
+            <h2>Security</h2>
+            
+            <div class="settings-option">
+                <div class="option-info">
+                    <h3>Change Password</h3>
+                    <p>Update your account password</p>
+                </div>
+                <button id="show-password-form" class="btn btn-primary">Change</button>
+            </div>
+            
+            <form id="password-change-form">
+                <div class="form-group">
+                    <label for="current-password">Current Password</label>
+                    <input type="password" id="current-password" required>
+                </div>
+                <div class="form-group">
+                    <label for="new-password">New Password</label>
+                    <input type="password" id="new-password" required>
+                </div>
+                <div class="form-group">
+                    <label for="confirm-password">Confirm New Password</label>
+                    <input type="password" id="confirm-password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Update Password</button>
+                <button type="button" id="cancel-password-change" class="btn btn-secondary">Cancel</button>
+            </form>
+        </div>
+        
+        <div class="settings-section">
+            <h2>Notifications</h2>
+            
+            <div class="settings-option">
+                <div class="option-info">
+                    <h3>Email Notifications</h3>
+                    <p>Receive email alerts for new trades and messages</p>
+                </div>
+                <label class="switch">
+                    <input type="checkbox" id="email-notifications" checked>
+                    <span class="slider round"></span>
+                </label>
+            </div>
+            
+            <div class="settings-option">
+                <div class="option-info">
+                    <h3>Push Notifications</h3>
+                    <p>Get browser notifications for important updates</p>
+                </div>
+                <label class="switch">
+                    <input type="checkbox" id="push-notifications" checked>
+                    <span class="slider round"></span>
+                </label>
+            </div>
+        </div>
+        
+        <div class="settings-section">
+            <h2>Privacy</h2>
+            
+            <div class="settings-option">
+                <div class="option-info">
+                    <h3>Profile Visibility</h3>
+                    <p>Control who can see your profile information</p>
+                </div>
+                <select id="profile-visibility">
+                    <option value="public">Public</option>
+                    <option value="friends">Friends Only</option>
+                    <option value="private">Private</option>
+                </select>
+            </div>
+        </div>
+    </main>
+
+    <script type="module">
+    import { auth } from './js/auth/firebase-init.js';
+    import {
+        onAuthStateChanged,
+        signOut,
+        EmailAuthProvider
+    } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-auth.js";
+
+    // Setup logout button
+    document.getElementById('logout-btn').addEventListener('click', async () => {
+        try {
+            await signOut(auth);
+            window.location.href = "index.html";
+        } catch (error) {
+            console.error("Logout error:", error);
+            alert("Error during logout. Please try again.");
+        }
+    });
+
+    // Password change form toggle
+    const showPasswordForm = document.getElementById('show-password-form');
+    const passwordForm = document.getElementById('password-change-form');
+    const cancelPasswordChange = document.getElementById('cancel-password-change');
+
+    showPasswordForm.addEventListener('click', () => {
+        passwordForm.style.display = 'block';
+        showPasswordForm.style.display = 'none';
+    });
+
+    cancelPasswordChange.addEventListener('click', () => {
+        passwordForm.style.display = 'none';
+        showPasswordForm.style.display = 'block';
+        passwordForm.reset();
+    });
+
+    // Handle password change
+    passwordForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const currentPassword = document.getElementById('current-password').value;
+        const newPassword = document.getElementById('new-password').value;
+        const confirmPassword = document.getElementById('confirm-password').value;
+
+        if (newPassword !== confirmPassword) {
+            alert('New password and confirm password do not match.');
+            return;
+        }
+
+        const user = auth.currentUser;
+        if (!user || !user.email) {
+            alert('User not authenticated.');
+            return;
+        }
+
+        try {
+            const credential = EmailAuthProvider.credential(user.email, currentPassword);
+            await user.reauthenticateWithCredential(credential);
+
+            await user.updatePassword(newPassword);
+            alert('Password updated successfully!');
+
+            passwordForm.style.display = 'none';
+            showPasswordForm.style.display = 'block';
+            passwordForm.reset();
+        } catch (error) {
+            console.error('Error updating password:', error);
+            alert(error.message || 'Failed to update password.');
+        }
+    });
+
+    // Show password form if hash is present
+    if (window.location.hash === '#password') {
+        passwordForm.style.display = 'block';
+        showPasswordForm.style.display = 'none';
+        window.scrollTo(0, document.getElementById('password-change-form').offsetTop);
+    }
+
+    // Check auth state
+    onAuthStateChanged(auth, (user) => {
+        if (!user) {
+            window.location.href = "index.html";
+        }
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Project Guard X</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="title-container">
+        <h1 class="title">Project Guard X</h1>
+    </div>
+    
+    <div class="form-box">
+        <input type="email" id="signupEmail" placeholder="Email">
+        <input type="text" id="username" placeholder="Username" required">
+
+        <div class="password-container">
+        <input type="password" id="signupPassword" placeholder="Password">
+        <button type="button" id="toggleSignupPass">Show</button>
+        </div>
+
+        <div class="password-container">
+        <input type="password" id="confirmPassword" placeholder="Confirm Password">
+        <button type="button" id="toggleConfirmPass">Show</button>
+        </div>
+
+        <button id="signupBtn">Sign Up</button>
+
+        <p>Already have an account? <a href="index.html">Login</a></p>
+    </div>
+
+    <script src="js/auth/main.js" type="module"></script>
+</body>
+</html>

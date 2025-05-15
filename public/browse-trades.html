@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browse Trades | Game Trade Marketplace</title>
+    <link rel="stylesheet" href="trade.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="browse-trades.css">
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <a href="dashboard.html" class="home-btn">
+                <i class="fas fa-home"></i> Back to Dashboard
+            </a>
+            <h1><i class="fas fa-search"></i> Browse Trades</h1>
+            <a href="trade.html" class="my-trades-btn">
+                <i class="fas fa-list"></i> My Trades
+            </a>
+        </div>
+    </header>
+
+    <main>
+        <section class="trade-posts-section">
+            <h2><i class="fas fa-gamepad"></i> Available Trades</h2>
+            <div class="filter-controls">
+                <input type="text" id="search-games" placeholder="Search games...">
+                <select id="filter-condition">
+                    <option value="">All Conditions</option>
+                    <option value="New">New</option>
+                    <option value="Like New">Like New</option>
+                    <option value="Used">Used</option>
+                </select>
+            </div>
+            <div id="trade-posts-list" class="trade-posts-grid"></div>
+        </section>
+    </main>
+
+    <!-- Comment Modal -->
+    <div id="comment-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h3>Comments on <span id="trade-item-title"></span></h3>
+            <div id="comments-container"></div>
+            <form id="comment-form">
+                <textarea id="comment-text" placeholder="Write your comment..." required></textarea>
+                <button type="submit">Post Comment</button>
+            </form>
+        </div>
+    </div>
+
+    <script type="module" src="js/browse-trades.js"></script>
+</body>
+</html>
