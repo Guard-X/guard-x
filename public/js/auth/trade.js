@@ -253,6 +253,24 @@ document.addEventListener("DOMContentLoaded", () => {
                         });
                         commentDiv.querySelector('.reply-text').value = '';
                         commentDiv.querySelector('.reply-form').style.display = 'none';
+
+                        const parentCommentDoc = await getDoc(doc(db, "comments", commentId));
+                        if (parentCommentDoc.exists()) {
+                            const parentCommentData = parentCommentDoc.data();
+                            const parentCommentOwnerId = parentCommentData.userId;
+                            if (parentCommentOwnerId !== user.uid) { // Only notify if not replying to your own comment
+                                await addDoc(collection(db, "notifications"), {
+                                    userId: parentCommentOwnerId,
+                                    type: "reply",
+                                    tradeId: currentTradeId,
+                                    commentId: commentId,
+                                    replyText: replyText,
+                                    fromUser: user.email,
+                                    createdAt: serverTimestamp(),
+                                    read: false
+                                });
+                            }
+                        }
                     };
                 });
             });
@@ -284,7 +302,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 submitBtn.disabled = true;
                 submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Posting...';
 
-                await addDoc(commentsCollectionRef, {
+                const commentDocRef = await addDoc(commentsCollectionRef, {
                     tradeId: currentTradeId,
                     userId: user.uid,
                     userEmail: user.email,
@@ -293,6 +311,24 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
 
                 commentText.value = '';
+
+                // After posting a comment
+                const tradeDoc = await getDoc(doc(db, "trades", currentTradeId));
+                if (tradeDoc.exists()) {
+                    const tradeData = tradeDoc.data();
+                    if (tradeData.userId !== user.uid) { // Only notify if not commenting on your own trade
+                        await addDoc(collection(db, "notifications"), {
+                            userId: tradeData.userId,
+                            type: "comment",
+                            tradeId: currentTradeId,
+                            commentId: commentDocRef.id,
+                            commentText: text,
+                            fromUser: user.email,
+                            createdAt: serverTimestamp(),
+                            read: false
+                        });
+                    }
+                }
             } catch (error) {
                 alert("Failed to post comment.");
             } finally {
@@ -413,6 +449,24 @@ document.addEventListener("DOMContentLoaded", () => {
                         });
                         commentDiv.querySelector('.reply-text').value = '';
                         commentDiv.querySelector('.reply-form').style.display = 'none';
+
+                        const parentCommentDoc = await getDoc(doc(db, "comments", thisCommentId));
+                        if (parentCommentDoc.exists()) {
+                            const parentCommentData = parentCommentDoc.data();
+                            const parentCommentOwnerId = parentCommentData.userId;
+                            if (parentCommentOwnerId !== user.uid) { // Only notify if not replying to your own comment
+                                await addDoc(collection(db, "notifications"), {
+                                    userId: parentCommentOwnerId,
+                                    type: "reply",
+                                    tradeId: currentTradeId,
+                                    commentId: thisCommentId,
+                                    replyText: replyText,
+                                    fromUser: user.email,
+                                    createdAt: serverTimestamp(),
+                                    read: false
+                                });
+                            }
+                        }
                     };
                 });
 

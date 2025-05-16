@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
-    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
     <!-- Add icon library -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
@@ -52,11 +52,11 @@
         <section id="chat-area">
             <h2>Chat</h2>
             <p>Click below to open the chat interface.</p>
-            <button onclick="alert('Opening chat...')">Go to Chat</button>
+            <button onclick="window.location.href = 'chat.html';">Go to Chat</button>
         </section>
     </main>
 
-    <script type="module" src="/public/js/auth/firebase-init.js"></script>
+    <script type="module" src="/js/auth/firebase-init.js"></script>
     <script type="module" src="js/auth/main.js"></script>
     <script type="module" src="js/auth/dashboard.js"></script>
 </body>

@@ -1,0 +1,107 @@
+body {
+    background: #0a0a1e;
+    color: #fff;
+    font-family: 'Orbitron', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+.chat-container {
+    display: flex;
+    height: 100vh;
+}
+.friends-list {
+    width: 260px;
+    background: #181840;
+    padding: 20px;
+    border-right: 2px solid #22224a;
+    box-sizing: border-box;
+}
+.friends-list h2 {
+    color: #00C2FF;
+    margin-bottom: 10px;
+}
+.friends-list ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.friends-list li {
+    padding: 10px;
+    margin-bottom: 8px;
+    background: #22224a;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.friends-list li.active, .friends-list li:hover {
+    background: #00C2FF;
+    color: #fff;
+}
+.chat-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: #101028;
+}
+.chat-header {
+    padding: 18px;
+    background: #181840;
+    border-bottom: 2px solid #22224a;
+    font-size: 1.2em;
+    color: #A65EFF;
+}
+.chat-messages {
+    flex: 1;
+    padding: 18px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.message {
+    max-width: 60%;
+    padding: 10px 16px;
+    border-radius: 16px;
+    margin-bottom: 4px;
+    word-break: break-word;
+    font-size: 1em;
+}
+.message.me {
+    align-self: flex-end;
+    background: linear-gradient(90deg, #00C2FF, #A65EFF);
+    color: #fff;
+}
+.message.them {
+    align-self: flex-start;
+    background: #22224a;
+    color: #fff;
+}
+#chat-form {
+    display: flex;
+    padding: 16px;
+    background: #181840;
+    border-top: 2px solid #22224a;
+}
+#chat-input {
+    flex: 1;
+    padding: 10px;
+    border-radius: 6px;
+    border: none;
+    font-size: 1em;
+    margin-right: 10px;
+    background: #22224a;
+    color: #fff;
+}
+#chat-form button {
+    background: linear-gradient(90deg, #00C2FF, #A65EFF);
+    border: none;
+    color: #fff;
+    padding: 0 18px;
+    border-radius: 6px;
+    font-size: 1.2em;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+#chat-form button:hover {
+    background: #A65EFF;
+}

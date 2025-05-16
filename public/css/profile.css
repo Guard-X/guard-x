@@ -1,0 +1,150 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
+:root {
+    --primary-color: #A65EFF;
+    --secondary-color: #00C2FF;
+    --accent-color: #4fc3f7;
+    --background-color: #0a0a1e;
+    --card-color: rgba(20, 20, 50, 0.92);
+    --text-color: #fff;
+    --border-radius: 14px;
+    --box-shadow: 0 4px 24px rgba(0, 194, 255, 0.25);
+}
+
+body {
+    background: #0a0a1e url('https://wallpapercave.com/wp/wp2634221.jpg') no-repeat center center/cover;
+    background-size: cover;
+    color: var(--text-color);
+    min-height: 100vh;
+    font-family: 'Orbitron', sans-serif;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.2rem 2rem 1rem 2rem;
+    background: rgba(10,10,30,0.97);
+    box-shadow: var(--box-shadow);
+}
+
+.back-btn, .icon-btn {
+    background: linear-gradient(90deg, #00C2FF, #A65EFF);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(166, 94, 255, 0.7);
+    transition: background 0.3s, transform 0.2s;
+}
+
+.back-btn:hover, .icon-btn:hover {
+    background: linear-gradient(90deg, #A65EFF, #00C2FF);
+    transform: scale(1.05);
+}
+
+.profile-container {
+    max-width: 800px;
+    margin: 30px auto;
+    padding: 30px;
+    background: var(--card-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-color: #222;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 30px;
+    overflow: hidden;
+    box-shadow: 0 0 18px #A65EFF55;
+}
+
+.avatar i {
+    font-size: 50px;
+    color: #666;
+}
+
+.profile-info h1 {
+    font-size: 2rem;
+    color: var(--secondary-color);
+    margin-bottom: 0.5rem;
+}
+
+.edit-username {
+    font-size: 1.2rem;
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    border: 1.5px solid var(--secondary-color);
+    margin-bottom: 0.5rem;
+    background: #181838;
+    color: #fff;
+    width: 80%;
+}
+
+.btn {
+    padding: 8px 14px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    margin-right: 8px;
+    margin-bottom: 8px;
+}
+
+.btn-primary {
+    background-color: var(--secondary-color);
+    color: white;
+}
+
+.btn-secondary {
+    background-color: #f1f1f1;
+    color: #333;
+}
+
+.profile-details {
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+
+.friends-section {
+    margin-top: 30px;
+}
+
+.friends-section h2 {
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+#friends-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#friends-list li {
+    background: rgba(40, 40, 70, 0.95);
+    border-radius: 8px;
+    padding: 0.8rem 1.2rem;
+    color: #fff;
+    margin-bottom: 0.7rem;
+    font-size: 1.1rem;
+    box-shadow: 0 0 8px #A65EFF33;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+}

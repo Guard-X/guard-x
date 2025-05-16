@@ -1,4 +1,4 @@
-import { auth, db } from "./auth/firebase-init.js";
+import { auth, db } from "./firebase-init.js";
 import { 
     collection, 
     getDocs,
@@ -31,40 +31,33 @@ const displayAllTradePosts = async (userId) => {
         tradePostsList.innerHTML = '';
 
         if (querySnapshot.empty) {
-            tradePostsList.innerHTML = '<p>No trade posts available from other users.</p>';
+            tradePostsList.innerHTML = '<div class="no-trades"><i class="fas fa-info-circle"></i> No trade posts available from other users.</div>';
             return;
         }
 
-        querySnapshot.forEach((doc) => {
-            const tradeData = doc.data();
+        querySnapshot.forEach((docSnap) => {
+            const tradeData = docSnap.data();
             const tradeElement = document.createElement("div");
-            tradeElement.classList.add("trade-item");
+            tradeElement.classList.add("trade-post");
 
-            const postDate = tradeData.createdAt 
-                ? tradeData.createdAt.toDate().toLocaleString() 
-                : 'Recently';
+            const priceDisplay = tradeData.price
+                ? `<div class="price-tag">${tradeData.price}</div>`
+                : '';
+
+            const createdAt = tradeData.createdAt?.toDate ? tradeData.createdAt.toDate() : new Date();
 
             tradeElement.innerHTML = `
-                <div class="trade-header">
-                    <h3>${tradeData.gameName || 'Unknown Game'}: ${tradeData.itemName}</h3>
-                    <div class="trade-meta">
-                        <span class="condition">${tradeData.condition || 'Condition not specified'}</span>
-                        ${tradeData.price ? `<span class="price">$${tradeData.price}</span>` : ''}
-                    </div>
+                <h3>${tradeData.gameName || 'Unknown Game'}</h3>
+                <div class="game-name">${tradeData.itemName || ''}</div>
+                ${priceDisplay}
+                <div class="description">${tradeData.description || ''}</div>
+                <div class="trade-meta">
+                    <span class="user"><i class="fas fa-user"></i> ${tradeData.userEmail || 'Anonymous'}</span>
+                    <span class="date"><i class="fas fa-clock"></i> ${createdAt.toLocaleString()}</span>
                 </div>
-                <p class="trade-description">${tradeData.description}</p>
-                <div class="trade-footer">
-                    <small>Posted by: ${tradeData.userEmail || 'Anonymous'}</small>
-                    <small>Posted: ${postDate}</small>
-                </div>
-                <div class="trade-actions">
-                    <button class="contact-btn" data-email="${tradeData.userEmail}">
-                        <i class="fas fa-envelope"></i> Contact
-                    </button>
-                    <button class="comments-btn" data-tradeid="${doc.id}">
-                        <i class="fas fa-comments"></i> Comments
-                    </button>
-                </div>
+                <button class="comment-btn" data-tradeid="${docSnap.id}">
+                    <i class="fas fa-comments"></i> Comments
+                </button>
             `;
             tradePostsList.appendChild(tradeElement);
         });
@@ -72,26 +65,15 @@ const displayAllTradePosts = async (userId) => {
         setupTradeButtons();
     } catch (error) {
         console.error("Error fetching trade posts:", error);
-        document.getElementById("trade-posts-list").innerHTML = 
-            '<p>Error loading trade posts. Please try again.</p>';
+        document.getElementById("trade-posts-list").innerHTML =
+            '<div class="no-trades"><i class="fas fa-exclamation-triangle"></i> Error loading trade posts. Please try again.</div>';
     }
 };
 
-
 // Setup trade action buttons
 const setupTradeButtons = () => {
-    // Contact buttons
-    document.querySelectorAll('.contact-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            const email = e.currentTarget.dataset.email;
-            if (email) {
-                window.location.href = `mailto:${email}?subject=Regarding your trade post`;
-            }
-        });
-    });
-
-    // Comments buttons
-    document.querySelectorAll('.comments-btn').forEach(btn => {
+    // Only Comments buttons now
+    document.querySelectorAll('.comment-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
             currentTradeId = e.currentTarget.dataset.tradeid;
             openCommentsModal(currentTradeId);
@@ -121,7 +103,7 @@ const openCommentsModal = async (tradeId) => {
 // Load comments for a trade
 const loadComments = (tradeId) => {
     const commentsContainer = document.getElementById('comments-container');
-    commentsContainer.innerHTML = '<p>Loading comments...</p>';
+    commentsContainer.innerHTML = '<div class="no-trades"><i class="fas fa-spinner fa-spin"></i> Loading comments...</div>';
 
     const q = query(
         commentsCollectionRef,
@@ -133,7 +115,7 @@ const loadComments = (tradeId) => {
         commentsContainer.innerHTML = '';
 
         if (snapshot.empty) {
-            commentsContainer.innerHTML = '<p>No comments yet. Be the first to comment!</p>';
+            commentsContainer.innerHTML = '<div class="no-trades">No comments yet.</div>';
             return;
         }
 
@@ -142,17 +124,10 @@ const loadComments = (tradeId) => {
             const commentId = doc.id;
             const commentElement = document.createElement('div');
             commentElement.classList.add('comment');
-
-            const commentDate = comment.createdAt 
-                ? comment.createdAt.toDate().toLocaleString() 
-                : 'Recently';
-
             commentElement.innerHTML = `
-                <div class="comment-header">
-                    <strong>${comment.userEmail || 'Anonymous'}</strong>
-                    <small>${commentDate}</small>
-                </div>
-                <p>${comment.text}</p>
+                <span class="comment-user">${comment.userEmail || 'Anonymous'}:</span>
+                <span>${comment.text}</span>
+                <small>${comment.createdAt ? comment.createdAt.toDate().toLocaleString() : 'Recently'}</small>
                 <button class="reply-btn" data-commentid="${commentId}"><i class="fas fa-reply"></i> Reply</button>
                 <div class="replies" id="replies-${commentId}"></div>
                 <form class="reply-form" id="reply-form-${commentId}" style="display:none; margin-top:0.5rem;">
@@ -190,18 +165,23 @@ const loadComments = (tradeId) => {
                 commentElement.querySelector('.reply-text').value = '';
                 commentElement.querySelector('.reply-form').style.display = 'none';
 
-                // After successfully adding a reply
-                if (comment.userId !== user.uid) { // Don't notify yourself
-                    await addDoc(collection(db, "notifications"), {
-                        userId: comment.userId, // The owner of the comment
-                        type: "reply",
-                        tradeId: currentTradeId,
-                        commentId: commentId,
-                        replyText: replyText,
-                        fromUser: user.email,
-                        createdAt: serverTimestamp(),
-                        read: false
-                    });
+                // Notify the parent comment owner
+                const parentCommentDoc = await getDoc(doc(db, "comments", commentId));
+                if (parentCommentDoc.exists()) {
+                    const parentCommentData = parentCommentDoc.data();
+                    const parentCommentOwnerId = parentCommentData.userId;
+                    if (parentCommentOwnerId !== user.uid) {
+                        await addDoc(collection(db, "notifications"), {
+                            userId: parentCommentOwnerId,
+                            type: "reply",
+                            tradeId: currentTradeId,
+                            commentId: commentId,
+                            replyText: replyText,
+                            fromUser: user.email,
+                            createdAt: serverTimestamp(),
+                            read: false
+                        });
+                    }
                 }
             };
         });
