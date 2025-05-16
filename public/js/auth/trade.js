@@ -16,6 +16,49 @@ import {
 } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-auth.js";
 
+// Add this helper at the top or near your imports
+function showToast(message, type = "info") {
+    let toast = document.createElement("div");
+    toast.className = `custom-toast ${type}`;
+    toast.innerHTML = `<span>${message}</span>`;
+    document.body.appendChild(toast);
+    setTimeout(() => { toast.classList.add("show"); }, 10);
+    setTimeout(() => {
+        toast.classList.remove("show");
+        setTimeout(() => toast.remove(), 400);
+    }, 3000);
+}
+
+// Add this helper function near showToast
+function showConfirm(message, onConfirm) {
+    // Remove any existing confirm modal
+    document.querySelectorAll('.custom-confirm-modal').forEach(m => m.remove());
+    // Create modal
+    const modal = document.createElement('div');
+    modal.className = 'custom-confirm-modal';
+    modal.innerHTML = `
+        <div class="custom-confirm-content">
+            <span class="custom-confirm-message">${message}</span>
+            <div class="custom-confirm-actions">
+                <button class="custom-confirm-yes">Yes</button>
+                <button class="custom-confirm-no">No</button>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(modal);
+    setTimeout(() => { modal.classList.add("show"); }, 10);
+
+    modal.querySelector('.custom-confirm-yes').onclick = () => {
+        modal.classList.remove("show");
+        setTimeout(() => modal.remove(), 300);
+        onConfirm();
+    };
+    modal.querySelector('.custom-confirm-no').onclick = () => {
+        modal.classList.remove("show");
+        setTimeout(() => modal.remove(), 300);
+    };
+}
+
 const tradeCollectionRef = collection(db, "trades");
 const commentsCollectionRef = collection(db, "comments");
 // Display user's trade posts
@@ -39,6 +82,7 @@ const displayUserTradePosts = async (user) => {
                     <p>You have no active trades. Create one above!</p>
                 </div>
             `;
+            showToast("No active trades found.", "info");
             return;
         }
 
@@ -77,18 +121,19 @@ const displayUserTradePosts = async (user) => {
         document.querySelectorAll('.delete-btn').forEach(button => {
             button.addEventListener('click', async (e) => {
                 const tradeId = e.target.closest('.delete-btn').dataset.id;
-                if (confirm('Are you sure you want to delete this trade?')) {
+                showConfirm('Are you sure you want to delete this trade?', async () => {
                     try {
                         button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Deleting...';
                         button.disabled = true;
                         await deleteDoc(doc(db, "trades", tradeId));
                         await displayUserTradePosts(user);
+                        showToast("Trade deleted successfully!", "success");
                     } catch (error) {
-                        alert(`Failed to delete trade: ${error.message}`);
+                        showToast(`Failed to delete trade: ${error.message}`, "error");
                         button.innerHTML = '<i class="fas fa-trash"></i> Delete';
                         button.disabled = false;
                     }
-                }
+                });
             });
         });
     } catch (error) {
@@ -108,7 +153,7 @@ const createTradePost = async (event) => {
 
     const user = auth.currentUser;
     if (!user) {
-        alert("Please sign in to create trade posts");
+        showToast("Please sign in to create trade posts", "error");
         window.location.href = "index.html";
         return;
     }
@@ -120,7 +165,7 @@ const createTradePost = async (event) => {
     const submitBtn = event.target.querySelector('button[type="submit"]');
 
     if (!gameName || !itemName || !description) {
-        alert("Please fill in all required fields");
+        showToast("Please fill in all required fields", "error");
         return;
     }
 
@@ -147,7 +192,7 @@ const createTradePost = async (event) => {
         submitBtn.innerHTML = '<i class="fas fa-plus-circle"></i> Post Trade';
         submitBtn.disabled = false;
     } catch (error) {
-        alert(`Error: ${error.message}`);
+        showToast(`Error: ${error.message}`, "error");
         submitBtn.innerHTML = '<i class="fas fa-plus-circle"></i> Post Trade';
         submitBtn.disabled = false;
     }
@@ -243,7 +288,10 @@ document.addEventListener("DOMContentLoaded", () => {
                         const user = auth.currentUser;
                         if (!user) return;
                         const replyText = commentDiv.querySelector('.reply-text').value.trim();
-                        if (!replyText) return;
+                        if (!replyText) {
+                            showToast("Please enter a reply.", "error");
+                            return;
+                        }
                         const repliesRef = collection(db, "comments", commentId, "replies");
                         await addDoc(repliesRef, {
                             userId: user.uid,
@@ -295,7 +343,10 @@ document.addEventListener("DOMContentLoaded", () => {
             if (!user || !currentTradeId) return;
 
             const text = commentText.value.trim();
-            if (!text) return;
+            if (!text) {
+                showToast("Please enter a comment.", "error");
+                return;
+            }
 
             const submitBtn = commentForm.querySelector('button[type="submit"]');
             try {
@@ -330,7 +381,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     }
                 }
             } catch (error) {
-                alert("Failed to post comment.");
+                showToast("Failed to post comment.", "error");
             } finally {
                 submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Post Comment';
                 submitBtn.disabled = false;
@@ -439,7 +490,10 @@ document.addEventListener("DOMContentLoaded", () => {
                         const user = auth.currentUser;
                         if (!user) return;
                         const replyText = commentDiv.querySelector('.reply-text').value.trim();
-                        if (!replyText) return;
+                        if (!replyText) {
+                            showToast("Please enter a reply.", "error");
+                            return;
+                        }
                         const repliesRef = collection(db, "comments", thisCommentId, "replies");
                         await addDoc(repliesRef, {
                             userId: user.uid,

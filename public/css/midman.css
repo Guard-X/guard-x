@@ -1,0 +1,133 @@
+body {
+    background: #18192b;
+    color: #fff;
+    font-family: 'Orbitron', Arial, sans-serif;
+    margin: 0;
+    min-height: 100vh;
+}
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #23244a;
+    padding: 1.2rem 2rem 1.2rem 1rem;
+    box-shadow: 0 2px 12px #0002;
+}
+header h1 {
+    font-size: 2rem;
+    color: #00C2FF;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+}
+.back-btn {
+    background: none;
+    border: none;
+    color: #00C2FF;
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.back-btn:hover {
+    color: #A65EFF;
+}
+main {
+    max-width: 700px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: #23244a;
+    border-radius: 16px;
+    box-shadow: 0 0 24px #A65EFF33;
+}
+section {
+    margin-bottom: 2.5rem;
+}
+h2 {
+    color: #A65EFF;
+    margin-bottom: 1rem;
+    font-size: 1.3rem;
+}
+.btn-primary {
+    background: linear-gradient(90deg, #00C2FF, #A65EFF);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 0.7rem 1.5rem;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-bottom: 1rem;
+    transition: background 0.2s;
+}
+.btn-primary:hover {
+    background: linear-gradient(90deg, #A65EFF, #00C2FF);
+}
+.queue-info {
+    margin: 1rem 0;
+    font-size: 1.1rem;
+    color: #00C2FF;
+}
+#midman-online-list, #queue-list, #admin-queue-list {
+    background: #18192b;
+    border-radius: 8px;
+    padding: 1rem;
+    min-height: 48px;
+    box-shadow: 0 0 8px #A65EFF22;
+}
+.midman-online {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    margin-bottom: 0.7rem;
+    font-size: 1.05rem;
+}
+.midman-online i {
+    color: #00C2FF;
+}
+.loading {
+    color: #bdbdf7;
+    font-style: italic;
+}
+.queue-user {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    margin-bottom: 0.5rem;
+    font-size: 1.05rem;
+}
+.queue-user.me {
+    color: #00C2FF;
+    font-weight: bold;
+}
+.queue-position {
+    background: #A65EFF;
+    color: #fff;
+    border-radius: 50%;
+    width: 1.7em;
+    height: 1.7em;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    margin-right: 0.7em;
+}
+.accept-btn, .cancel-btn {
+    background: none;
+    border: none;
+    color: #00C2FF;
+    font-size: 1em;
+    cursor: pointer;
+    margin-left: 0.5em;
+    padding: 0.3em 0.7em;
+    border-radius: 4px;
+    transition: background 0.2s;
+}
+.accept-btn:hover { background: #00C2FF22; color: #00C2FF; }
+.cancel-btn { color: #ff4d4d; }
+.cancel-btn:hover { background: #ff4d4d22; color: #ff4d4d; }
+@media (max-width: 700px) {
+    main {
+        padding: 1rem;
+    }
+}

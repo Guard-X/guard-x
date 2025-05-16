@@ -522,3 +522,86 @@ main {
     background: linear-gradient(90deg, #A65EFF, #00C2FF);
     transform: scale(1.05);
 }
+.custom-toast {
+    position: fixed;
+    bottom: 2.5rem;
+    left: 50%;
+    transform: translateX(-50%) scale(0.95);
+    background: #23244a;
+    color: #fff;
+    padding: 1rem 2.2rem;
+    border-radius: 8px;
+    box-shadow: 0 0 18px #A65EFF66;
+    font-size: 1.1rem;
+    opacity: 0;
+    z-index: 9999;
+    pointer-events: none;
+    transition: opacity 0.3s, transform 0.3s;
+}
+.custom-toast.show {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+}
+.custom-toast.success { background: linear-gradient(90deg, #00C2FF, #2ecc71); }
+.custom-toast.error { background: linear-gradient(90deg, #ff4d4d, #A65EFF); }
+.custom-toast.info { background: #23244a; }
+
+.custom-confirm-modal {
+    position: fixed;
+    z-index: 10001;
+    left: 0; top: 0; width: 100vw; height: 100vh;
+    background: rgba(10,10,30,0.75);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+}
+.custom-confirm-modal.show {
+    opacity: 1;
+    pointer-events: all;
+}
+.custom-confirm-content {
+    background: #23244a;
+    color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 0 24px #A65EFF;
+    padding: 2rem 2.5rem;
+    min-width: 280px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+.custom-confirm-actions {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+}
+.custom-confirm-yes, .custom-confirm-no {
+    padding: 0.5rem 1.5rem;
+    border-radius: 6px;
+    border: none;
+    font-size: 1rem;
+    font-family: inherit;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.2s;
+}
+.custom-confirm-yes {
+    background: linear-gradient(90deg, #ff4d4d, #A65EFF);
+    color: #fff;
+}
+.custom-confirm-yes:hover {
+    background: linear-gradient(90deg, #A65EFF, #ff4d4d);
+}
+.custom-confirm-no {
+    background: #23244a;
+    color: #A65EFF;
+    border: 1px solid #A65EFF;
+}
+.custom-confirm-no:hover {
+    background: #A65EFF;
+    color: #fff;
+}

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Midman Finder | Project Guard X</title>
+    <link rel="stylesheet" href="css/midman.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <h1><i class="fas fa-user-shield"></i> Midman Finder</h1>
+        <button class="back-btn" onclick="window.location.href='dashboard.html'">
+            <i class="fas fa-arrow-left"></i> Back to Dashboard
+        </button>
+    </header>
+    <main>
+        <section class="midman-status">
+            <h2>Online Midmen</h2>
+            <div id="midman-online-list">
+                <span class="loading">Loading...</span>
+            </div>
+        </section>
+        <section class="queue-section">
+            <h2>Request Midman Service</h2>
+            <button id="request-midman-btn" class="btn-primary"><i class="fas fa-user-plus"></i> Request Midman</button>
+            <input type="text" class="add-user-input" placeholder="Other User Username" style="margin-left:1em; width: 180px;">
+            <div id="queue-info" class="queue-info"></div>
+        </section>
+        <section class="live-queue">
+            <h2>Live Queue</h2>
+            <div id="queue-list">
+                <span class="loading">Loading queue...</span>
+            </div>
+        </section>
+        <!-- Only visible to midmen -->
+        <section id="midman-admin-controls" style="display:none;">
+            <h2>Midman Controls</h2>
+            <div id="admin-queue-list"></div>
+        </section>
+    </main>
+    <script type="module" src="js/auth/midman.js"></script>
+</body>
+</html>

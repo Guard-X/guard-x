@@ -145,11 +145,29 @@ function setupLogout() {
 // Auth state
 onAuthStateChanged(auth, async (user) => {
     if (user) {
-        loadProfileData(user);
+        await loadProfileData(user);
         setupEditUsername(user);
         setupLogout();
         const profileUserId = getQueryParam("uid") || user.uid;
         await addChatButtonIfFriend(user, profileUserId);
+
+        // --- MIDMAN ROLE & ONLINE TOGGLE ---
+        const userDoc = await getDoc(doc(db, "users", user.uid));
+        const userData = userDoc.exists() ? userDoc.data() : {};
+        const midmanSection = document.getElementById("midman-role-section");
+        if (userData.role === "midman") {
+            midmanSection.style.display = "block";
+            const toggle = document.getElementById("midman-online-toggle");
+            toggle.checked = !!userData.online;
+            toggle.onchange = async () => {
+                await setDoc(doc(db, "users", user.uid), { online: toggle.checked }, { merge: true });
+                document.getElementById("midman-online-label").textContent = toggle.checked ? "Active" : "Inactive";
+            };
+            document.getElementById("midman-online-label").textContent = toggle.checked ? "Active" : "Inactive";
+        } else {
+            midmanSection.style.display = "none";
+        }
+        // --- END MIDMAN ROLE ---
     } else {
         window.location.href = "index.html";
     }

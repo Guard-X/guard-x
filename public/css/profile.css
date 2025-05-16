@@ -148,3 +148,25 @@ header {
     align-items: center;
     gap: 0.7rem;
 }
+
+.midman-badge {
+    background: linear-gradient(90deg, #00C2FF, #A65EFF);
+    color: #fff;
+    border-radius: 8px;
+    padding: 4px 12px;
+    font-weight: bold;
+    margin-right: 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5em;
+}
+
+#midman-online-label {
+    color: #00C2FF;
+    font-weight: bold;
+    margin-left: 0.3em;
+}
+
+#midman-online-toggle {
+    accent-color: #00C2FF;
+}

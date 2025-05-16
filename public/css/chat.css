@@ -105,3 +105,92 @@ body {
 #chat-form button:hover {
     background: #A65EFF;
 }
+.back-btn {
+    background: none;
+    border: none;
+    color: #00C2FF;
+    font-size: 1.1rem;
+    cursor: pointer;
+    margin: 1rem 0 0 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.back-btn i {
+    font-size: 1.2em;
+}
+.back-btn:hover {
+    color: #A65EFF;
+}
+.edit-btn, .delete-btn {
+    background: none;
+    border: none;
+    color: #A65EFF;
+    cursor: pointer;
+    margin-left: 4px;
+    font-size: 1em;
+    vertical-align: middle;
+}
+.edit-btn:hover, .delete-btn:hover {
+    color: #ff4d4d;
+}
+
+/* 3-dot menu styles */
+.msg-menu-wrap {
+    position: relative;
+    display: inline-block;
+    margin-left: 8px;
+    vertical-align: middle;
+}
+.msg-menu-btn {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1.1em;
+    cursor: pointer;
+    padding: 2px 6px;
+}
+.msg-menu-btn:hover {
+    color: #00C2FF;
+}
+.msg-menu-popup {
+    position: absolute;
+    right: 0;
+    top: 24px;
+    background: #23244a;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px #0006;
+    z-index: 10;
+    min-width: 90px;
+    display: none;
+    flex-direction: column;
+}
+.msg-menu-popup button {
+    background: none;
+    border: none;
+    width: 100%;
+    text-align: left;
+    padding: 8px 14px;
+    font-size: 1em;
+    cursor: pointer;
+    color: #fff;
+    transition: background 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+}
+.msg-menu-popup .edit-btn i { color: #00C2FF; }
+.msg-menu-popup .delete-btn i { color: #ff4d4d; }
+.msg-menu-popup .edit-btn:hover { background: #1a1a3a; color: #00C2FF; }
+.msg-menu-popup .delete-btn:hover { background: #1a1a3a; color: #ff4d4d; }
+
+/* Time above message */
+.msg-time {
+    font-size: 0.82em;
+    color: #bdbdf7;
+    margin-bottom: 2px;
+    margin-left: 2px;
+}
+.msg-text {
+    display: block;
+}

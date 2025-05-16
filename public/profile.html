@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Profile</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="/css/profile.css">
+    <link rel="stylesheet" href="css/profile.css">
 </head>
 <body>
     <header>
@@ -34,6 +34,14 @@
                 <button id="add-friend-btn" class="btn btn-primary" style="display:none;"><i class="fas fa-user-plus"></i> Add Friend</button>
                 <p id="profile-email"></p>
                 <p id="member-since"></p>
+                <!-- Show only for midman -->
+                <div id="midman-role-section" style="display:none; margin: 10px 0;">
+                    <span class="midman-badge"><i class="fas fa-user-shield"></i> Verified Midman</span>
+                    <label style="margin-left: 1em;">
+                        <input type="checkbox" id="midman-online-toggle" />
+                        <span id="midman-online-label">Active</span>
+                    </label>
+                </div>
             </div>
         </div>
         
