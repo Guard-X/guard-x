@@ -194,3 +194,21 @@ document.addEventListener('DOMContentLoaded', function() {
     togglePassword('toggleSignupPass', 'signupPassword');
     togglePassword('toggleConfirmPass', 'confirmPassword');
 });
+
+// Show/hide password with eye icon
+document.querySelectorAll('.toggle-password').forEach(icon => {
+    icon.addEventListener('click', function() {
+        const targetId = this.getAttribute('data-target');
+        const input = document.getElementById(targetId);
+        const iconElem = this.querySelector('i');
+        if (input.type === "password") {
+            input.type = "text";
+            iconElem.classList.remove('fa-eye');
+            iconElem.classList.add('fa-eye-slash');
+        } else {
+            input.type = "password";
+            iconElem.classList.remove('fa-eye-slash');
+            iconElem.classList.add('fa-eye');
+        }
+    });
+});

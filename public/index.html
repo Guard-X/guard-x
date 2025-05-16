@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Project Guard X</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     <div class="title-container">
@@ -15,8 +16,10 @@
         <h2>Login</h2>
         <input type="email" id="loginEmail" placeholder="Email">
         <div class="password-container">
-        <input type="password" id="loginPassword" placeholder="Password">
-        <button type="button" id="toggleLoginPass">Show</button>
+            <input type="password" id="loginPassword" placeholder="Password">
+            <span class="toggle-password" data-target="loginPassword">
+                <i class="fas fa-eye"></i>
+            </span>
         </div>
         <p id="loginError" style="color:red;"></p>
         <button id="loginBtn">Enter</button>

@@ -328,3 +328,32 @@ input, textarea, select {
     text-align: center;
     padding: 20px;
 }
+
+.password-container {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.password-container input[type="password"],
+.password-container input[type="text"] {
+    width: 100%;
+    padding-right: 40px;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #A65EFF;
+    font-size: 1.2em;
+    z-index: 2;
+    transition: color 0.2s;
+}
+
+.toggle-password:hover {
+    color: #00C2FF;
+}
