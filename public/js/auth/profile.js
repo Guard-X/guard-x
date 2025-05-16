@@ -25,10 +25,21 @@ function showProfileMessage(msg, type = "success") {
 
 // Load profile data and friends
 async function loadProfileData(user) {
-    document.getElementById('profile-username').textContent = user.displayName || 'User';
-    document.getElementById('profile-email').textContent = user.email;
-    const creationDate = new Date(user.metadata.creationTime);
-    document.getElementById('member-since').textContent = `Member since ${creationDate.toLocaleDateString()}`;
+    // Use Firestore data for username/email
+    document.getElementById('profile-username').textContent = user.username || user.email || 'User';
+    document.getElementById('profile-email').textContent = user.email || '';
+    // Use createdAt if available, else fallback to metadata
+    let creationDate = null;
+    if (user.createdAt && user.createdAt.toDate) {
+        creationDate = user.createdAt.toDate();
+    } else if (user.createdAt) {
+        creationDate = new Date(user.createdAt);
+    } else if (user.metadata && user.metadata.creationTime) {
+        creationDate = new Date(user.metadata.creationTime);
+    }
+    document.getElementById('member-since').textContent = creationDate
+        ? `Member since ${creationDate.toLocaleDateString()}`
+        : '';
 
     // Load friends (assuming a 'friends' subcollection under users)
     const friendsList = document.getElementById('friends-list');
@@ -62,7 +73,8 @@ async function addChatButtonIfFriend(currentUser, profileUserId) {
         if (!btn) {
             btn = document.createElement("button");
             btn.id = "chat-with-user-btn";
-            btn.textContent = "Chat with this user";
+            btn.className = "btn btn-primary";
+            btn.innerHTML = `<i class="fas fa-comments"></i> Chat with this user`;
             btn.style.margin = "10px 0 0 0";
             btn.onclick = () => {
                 window.location.href = `chat.html?uid=${profileUserId}`;
@@ -144,32 +156,68 @@ function setupLogout() {
 
 // Auth state
 onAuthStateChanged(auth, async (user) => {
-    if (user) {
-        await loadProfileData(user);
-        setupEditUsername(user);
-        setupLogout();
-        const profileUserId = getQueryParam("uid") || user.uid;
-        await addChatButtonIfFriend(user, profileUserId);
-
-        // --- MIDMAN ROLE & ONLINE TOGGLE ---
-        const userDoc = await getDoc(doc(db, "users", user.uid));
-        const userData = userDoc.exists() ? userDoc.data() : {};
-        const midmanSection = document.getElementById("midman-role-section");
-        if (userData.role === "midman") {
-            midmanSection.style.display = "block";
-            const toggle = document.getElementById("midman-online-toggle");
-            toggle.checked = !!userData.online;
-            toggle.onchange = async () => {
-                await setDoc(doc(db, "users", user.uid), { online: toggle.checked }, { merge: true });
-                document.getElementById("midman-online-label").textContent = toggle.checked ? "Active" : "Inactive";
-            };
-            document.getElementById("midman-online-label").textContent = toggle.checked ? "Active" : "Inactive";
-        } else {
-            midmanSection.style.display = "none";
-        }
-        // --- END MIDMAN ROLE ---
-    } else {
+    if (!user) {
         window.location.href = "index.html";
+        return;
+    }
+
+    const urlUid = getQueryParam("uid");
+    const profileUserId = urlUid || user.uid;
+
+    // Load the profile user's Firestore doc
+    const profileUserDoc = await getDoc(doc(db, "users", profileUserId));
+    const profileUserData = profileUserDoc.exists() ? profileUserDoc.data() : {};
+
+    // Show profile info
+    document.getElementById('profile-username').textContent = profileUserData.username || profileUserData.email || 'User';
+    document.getElementById('profile-email').textContent = profileUserData.email || '';
+    if (profileUserData.createdAt) {
+        const creationDate = profileUserData.createdAt.toDate ? profileUserData.createdAt.toDate() : new Date(profileUserData.createdAt);
+        document.getElementById('member-since').textContent = `Member since ${creationDate.toLocaleDateString()}`;
+    } else if (profileUserId === user.uid) {
+        const creationDate = new Date(user.metadata.creationTime);
+        document.getElementById('member-since').textContent = `Member since ${creationDate.toLocaleDateString()}`;
+    } else {
+        document.getElementById('member-since').textContent = '';
+    }
+
+    // Load friends for the profile user
+    await loadProfileData({ ...profileUserData, uid: profileUserId });
+
+    // After loading profile data
+    const isSelf = profileUserId === user.uid;
+
+    // Check if already friends
+    let isFriend = false;
+    if (!isSelf) {
+        const friendDoc = await getDoc(doc(db, "users", user.uid, "friends", profileUserId));
+        isFriend = friendDoc.exists();
+    }
+
+    document.getElementById('edit-username-btn').style.display = isSelf ? 'inline-block' : 'none';
+    document.getElementById('save-username-btn').style.display = 'none';
+    document.getElementById('edit-username').style.display = 'none';
+    // Only show add-friend-btn if not self and not already friends
+    document.getElementById('add-friend-btn').style.display = (!isSelf && !isFriend) ? 'inline-block' : 'none';
+
+    // Midman section: only show if self and role is midman
+    const midmanSection = document.getElementById("midman-role-section");
+    if (isSelf && profileUserData.role === "midman") {
+        midmanSection.style.display = "block";
+        const toggle = document.getElementById("midman-online-toggle");
+        toggle.checked = !!profileUserData.online;
+        toggle.onchange = async () => {
+            await setDoc(doc(db, "users", user.uid), { online: toggle.checked }, { merge: true });
+            document.getElementById("midman-online-label").textContent = toggle.checked ? "Active" : "Inactive";
+        };
+        document.getElementById("midman-online-label").textContent = toggle.checked ? "Active" : "Inactive";
+    } else {
+        midmanSection.style.display = "none";
+    }
+
+    // Add chat button if not self and is friend
+    if (!isSelf && isFriend) {
+        await addChatButtonIfFriend(user, profileUserId);
     }
 });
 
