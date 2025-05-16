@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
+    <canvas id="starfield-bg"></canvas>
+    <div class="bg-overlay"></div>
     <header>
         <button class="back-btn" onclick="window.history.back()">
             <i class="fas fa-arrow-left"></i> Back
@@ -32,5 +34,54 @@
         </section>
     </main>
     <script type="module" src="js/auth/friends.js"></script>
+    <script>
+    // Simple animated starfield
+    const canvas = document.getElementById('starfield-bg');
+    if (canvas) {
+        const ctx = canvas.getContext('2d');
+        let stars = [];
+        function resizeStarfield() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeStarfield);
+        resizeStarfield();
+
+        function createStars(count) {
+            stars = [];
+            for (let i = 0; i < count; i++) {
+                stars.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    r: Math.random() * 1.2 + 0.3,
+                    d: Math.random() * 0.5 + 0.2,
+                    o: Math.random() * 0.5 + 0.5
+                });
+            }
+        }
+        createStars(160);
+
+        function animateStars() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let s of stars) {
+                ctx.save();
+                ctx.globalAlpha = s.o;
+                ctx.beginPath();
+                ctx.arc(s.x, s.y, s.r, 0, 2 * Math.PI);
+                ctx.fillStyle = "#A65EFF";
+                ctx.shadowColor = "#00C2FF";
+                ctx.shadowBlur = 8;
+                ctx.fill();
+                ctx.restore();
+                // Twinkle
+                s.o += (Math.random() - 0.5) * 0.03;
+                if (s.o < 0.3) s.o = 0.3;
+                if (s.o > 1) s.o = 1;
+            }
+            requestAnimationFrame(animateStars);
+        }
+        animateStars();
+    }
+    </script>
 </body>
 </html>

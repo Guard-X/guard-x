@@ -18,6 +18,8 @@ body {
     min-height: 100vh;
     padding: 20px;
     text-align: center;
+    position: relative;
+    z-index: 2;
 }
 
 .title-container {
@@ -57,6 +59,8 @@ body {
     box-shadow: 0 0 15px rgba(0, 194, 255, 0.8);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
+    position: relative;
+    z-index: 3;
 }
 
 h2 {
@@ -141,6 +145,8 @@ p a:hover {
     grid-template-columns: 250px 1fr;
     gap: 20px;
     width: 100%;
+    position: relative;
+    z-index: 3;
 }
 
 .sidebar {
@@ -156,6 +162,8 @@ p a:hover {
     display: grid;
     grid-template-rows: auto 1fr;
     gap: 20px;
+    position: relative;
+    z-index: 3;
 }
 
 .tab-buttons {
@@ -253,6 +261,9 @@ p a:hover {
     width: 80%;
     max-width: 500px;
     border-radius: 8px;
+    position: relative;
+    z-index: 3;
+    box-shadow: 0 0 24px #A65EFF33, 0 4px 24px #00C2FF22;
 }
 
 .close {
@@ -356,4 +367,37 @@ input, textarea, select {
 
 .toggle-password:hover {
     color: #00C2FF;
+}
+
+#starfield-bg {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.8; /* Make stars more visible */
+}
+
+.bg-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(120deg, rgba(10,10,30,0.85) 60%, rgba(166,94,255,0.18) 100%);
+    z-index: 1;
+    pointer-events: none;
+    mix-blend-mode: lighten;
+}
+
+.form-box, .dashboard-container, .main-content, .profile-container, .settings-container, .trade-form-section, .trade-posts-section, .modal-content, .friends-section, .chat-container, main {
+    position: relative;
+    z-index: 3;
+    /* Optional: add a subtle box-shadow for more pop */
+    box-shadow: 0 0 24px #A65EFF33, 0 4px 24px #00C2FF22;
+}
+
+.form-box, .dashboard-container, .main-content, .profile-container {
+    position: relative;
+    z-index: 3;
 }

@@ -66,24 +66,42 @@ function listenToQueue() {
         queueList.innerHTML = "";
         let position = 1;
         let myPosition = null;
+        let myQueueDocId = null;
         if (snap.empty) {
             queueList.innerHTML = "<span class='loading'>No one is in the queue.</span>";
         } else {
             snap.forEach(docSnap => {
                 const qd = docSnap.data();
                 const isMe = qd.userId === currentUser?.uid;
-                if (isMe) myPosition = position;
+                if (isMe) {
+                    myPosition = position;
+                    myQueueDocId = docSnap.id;
+                }
                 queueList.innerHTML += `
                     <div class="queue-user${isMe ? " me" : ""}">
                         <span class="queue-position">${position}</span>
-                        <span>${qd.username || qd.userEmail || qd.userId}</span>
-                        ${isMe ? "<span>(You)</span>" : ""}
+                        <span class="queue-username">${qd.username || qd.userEmail || qd.userId}</span>
+                        ${isMe ? `<span>(You)</span> <button class="cancel-my-queue-btn" data-id="${docSnap.id}"><i class="fas fa-times"></i> Cancel Request</button>` : ""}
                     </div>
                 `;
                 position++;
             });
         }
         updateQueueInfo(myPosition, position - 1);
+
+        // Add cancel event for the current user's request
+        queueList.querySelectorAll('.cancel-my-queue-btn').forEach(btn => {
+            btn.onclick = async () => {
+                const queueId = btn.getAttribute('data-id');
+                // Optional: add a toast or confirmation here
+                await updateDoc(doc(db, "midmanQueue", queueId), {
+                    status: "cancelled",
+                    cancelledAt: serverTimestamp()
+                });
+                // Optional: show a toast
+                if (window.showToast) showToast("Your midman request has been cancelled.", "success");
+            };
+        });
     });
 }
 

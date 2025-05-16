@@ -3,44 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register - Project Guard X</title>
+    <title>Sign Up - Project Guard X</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <div class="title-container">
-        <h1 class="title">Project Guard X</h1>
-    </div>
-    
+    <canvas id="starfield-bg"></canvas>
+    <div class="bg-overlay"></div>
     <div class="form-box">
-        <input type="email" id="signupEmail" placeholder="Email">
-        <input type="text" id="username" placeholder="Username" required">
-
+        <h2>Sign Up</h2>
+        <input type="text" id="username" placeholder="Username" required>
+        <input type="email" id="signupEmail" placeholder="Email" required>
         <div class="password-container">
-            <input type="password" id="signupPassword" placeholder="Password">
+            <input type="password" id="signupPassword" placeholder="Password" required>
             <span class="toggle-password" data-target="signupPassword">
                 <i class="fas fa-eye"></i>
             </span>
         </div>
         <div class="password-container">
-            <input type="password" id="confirmPassword" placeholder="Confirm Password">
+            <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
             <span class="toggle-password" data-target="confirmPassword">
                 <i class="fas fa-eye"></i>
             </span>
         </div>
-
-        <div class="password-container">
-            <input type="password" id="loginPassword" placeholder="Password">
-            <span class="toggle-password" data-target="loginPassword">
-                <i class="fas fa-eye"></i>
-            </span>
-        </div>
-
-        <button id="signupBtn">Sign Up</button>
-
+        <p id="signupError" style="color:red;"></p>
+        <button id="signupBtn">Register</button>
         <p>Already have an account? <a href="index.html">Login</a></p>
     </div>
-
     <script src="js/auth/main.js" type="module"></script>
+    <script>
+    // Simple animated starfield (reuse from index.html)
+    const canvas = document.getElementById('starfield-bg');
+    if (canvas) {
+        const ctx = canvas.getContext('2d');
+        let stars = [];
+        function resizeStarfield() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeStarfield);
+        resizeStarfield();
+
+        function createStars(count) {
+            stars = [];
+            for (let i = 0; i < count; i++) {
+                stars.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    r: Math.random() * 1.2 + 0.3,
+                    d: Math.random() * 0.5 + 0.2,
+                    o: Math.random() * 0.5 + 0.5
+                });
+            }
+        }
+        createStars(160);
+
+        function animateStars() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let s of stars) {
+                ctx.save();
+                ctx.globalAlpha = s.o;
+                ctx.beginPath();
+                ctx.arc(s.x, s.y, s.r, 0, 2 * Math.PI);
+                ctx.fillStyle = "#A65EFF";
+                ctx.shadowColor = "#00C2FF";
+                ctx.shadowBlur = 8;
+                ctx.fill();
+                ctx.restore();
+                // Twinkle
+                s.o += (Math.random() - 0.5) * 0.03;
+                if (s.o < 0.3) s.o = 0.3;
+                if (s.o > 1) s.o = 1;
+            }
+            requestAnimationFrame(animateStars);
+        }
+        animateStars();
+    }
+    </script>
 </body>
 </html>

@@ -25,6 +25,8 @@ body {
     background-size: cover;
     color: var(--text-color);
     min-height: 100vh;
+    position: relative;
+    z-index: 2;
 }
 
 header {
@@ -86,6 +88,10 @@ main {
     display: grid;
     grid-template-columns: 1fr 2fr;
     gap: 2rem;
+    position: relative;
+    z-index: 3;
+    /* Optional: add a subtle box-shadow for more pop */
+    box-shadow: 0 0 24px #A65EFF33, 0 4px 24px #00C2FF22;
 }
 
 .trade-form-section, .trade-posts-section {
@@ -94,6 +100,10 @@ main {
     border-radius: var(--border-radius);
     box-shadow: var(--box-shadow);
     margin-bottom: 2rem;
+    position: relative;
+    z-index: 3;
+    /* Optional: add a subtle box-shadow for more pop */
+    box-shadow: 0 0 24px #A65EFF33, 0 4px 24px #00C2FF22;
 }
 
 .trade-form-section h2, .trade-posts-section h2 {
@@ -456,6 +466,10 @@ main {
     overflow-y: auto;
     align-items: center;
     justify-content: center;
+    position: relative;
+    z-index: 3;
+    /* Optional: add a subtle box-shadow for more pop */
+    box-shadow: 0 0 24px #A65EFF33, 0 4px 24px #00C2FF22;
 }
 .close-modal {
     position: absolute;
@@ -604,4 +618,32 @@ main {
 .custom-confirm-no:hover {
     background: #A65EFF;
     color: #fff;
+}
+
+#starfield-bg {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.8; /* Make stars more visible */
+}
+
+.bg-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(120deg, rgba(10,10,30,0.85) 60%, rgba(166,94,255,0.18) 100%);
+    z-index: 1;
+    pointer-events: none;
+    mix-blend-mode: lighten;
+}
+
+.form-box, .dashboard-container, .main-content, .profile-container, .settings-container, .trade-form-section, .trade-posts-section, .modal-content, .friends-section, .chat-container, main {
+    position: relative;
+    z-index: 3;
+    /* Optional: add a subtle box-shadow for more pop */
+    box-shadow: 0 0 24px #A65EFF33, 0 4px 24px #00C2FF22;
 }

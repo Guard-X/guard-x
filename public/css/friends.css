@@ -6,6 +6,8 @@ body {
     font-family: 'Orbitron', sans-serif;
     min-height: 100vh;
     margin: 0;
+    position: relative;
+    z-index: 2;
 }
 
 header {
@@ -46,6 +48,10 @@ main {
     background: rgba(20, 20, 50, 0.92);
     border-radius: 14px;
     box-shadow: 0 4px 24px rgba(0, 194, 255, 0.25);
+    position: relative;
+    z-index: 3;
+    /* Optional: add a subtle box-shadow for more pop */
+    box-shadow: 0 0 24px #A65EFF33, 0 4px 24px #00C2FF22;
 }
 
 section {
@@ -160,4 +166,32 @@ li.rejected {
 
 li.error {
     color: #ff4d4d;
+}
+
+#starfield-bg {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.8; /* Make stars more visible */
+}
+
+.bg-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(120deg, rgba(10,10,30,0.85) 60%, rgba(166,94,255,0.18) 100%);
+    z-index: 1;
+    pointer-events: none;
+    mix-blend-mode: lighten;
+}
+
+.form-box, .dashboard-container, .main-content, .profile-container, .settings-container, .trade-form-section, .trade-posts-section, .modal-content, .friends-section, .chat-container, main {
+    position: relative;
+    z-index: 3;
+    /* Optional: add a subtle box-shadow for more pop */
+    box-shadow: 0 0 24px #A65EFF33, 0 4px 24px #00C2FF22;
 }

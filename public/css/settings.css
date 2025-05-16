@@ -4,6 +4,8 @@ body {
     color: #fff;
     margin: 0;
     padding: 0;
+    position: relative;
+    z-index: 2;
 }
 
 header {
@@ -48,6 +50,9 @@ header {
     border-radius: 12px;
     box-shadow: 0 0 16px #A65EFF33;
     padding: 2rem 2.5rem;
+    position: relative;
+    z-index: 3;
+    box-shadow: 0 0 24px #A65EFF33, 0 4px 24px #00C2FF22;
 }
 
 .settings-section {
@@ -182,4 +187,32 @@ select {
     border-radius: 6px;
     padding: 0.4rem 1rem;
     font-size: 1rem;
+}
+
+#starfield-bg {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.8; /* Make stars more visible */
+}
+
+.bg-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(120deg, rgba(10,10,30,0.85) 60%, rgba(166,94,255,0.18) 100%);
+    z-index: 1;
+    pointer-events: none;
+    mix-blend-mode: lighten;
+}
+
+.form-box, .dashboard-container, .main-content, .profile-container, .settings-container, .trade-form-section, .trade-posts-section, .modal-content, .friends-section, .chat-container, main {
+    position: relative;
+    z-index: 3;
+    /* Optional: add a subtle box-shadow for more pop */
+    box-shadow: 0 0 24px #A65EFF33, 0 4px 24px #00C2FF22;
 }
