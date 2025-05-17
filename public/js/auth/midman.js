@@ -124,7 +124,7 @@ async function updateQueueInfo(myPosition = null, total = null) {
         if (docSnap.data().userId === currentUser?.uid) pos = idx + 1;
     });
     if (pos) {
-        queueInfo.innerHTML = `You are <b>#${pos}</b> in line. ${count - pos} ahead of you.`;
+        queueInfo.innerHTML = `You are <b#${pos}</b> in line. ${count - pos} ahead of you.`;
     } else {
         queueInfo.innerHTML = `You are not in the queue.`;
     }
@@ -133,21 +133,31 @@ async function updateQueueInfo(myPosition = null, total = null) {
 if (requestBtn) {
     requestBtn.addEventListener('click', async () => {
         if (!currentUser) return;
+        const otherUserInput = document.querySelector('.add-user-input');
+        const otherUsername = otherUserInput ? otherUserInput.value.trim() : "";
+        if (!otherUsername) {
+            if (window.showToast) showToast("Please enter the username of the other trader.", "error");
+            else alert("Please enter the username of the other trader.");
+            return;
+        }
         // Check if already in queue
         const queueRef = collection(db, "midmanQueue");
         const q = query(queueRef, where("userId", "==", currentUser.uid), where("status", "==", "waiting"));
         const snap = await getDocs(q);
         if (!snap.empty) {
-            alert("You are already in the queue.");
+            if (window.showToast) showToast("You are already in the queue.", "error");
+            else alert("You are already in the queue.");
             return;
         }
         await addDoc(queueRef, {
             userId: currentUser.uid,
             username: currentUser.displayName || "",
             userEmail: currentUser.email,
+            otherUsername: otherUsername,
             requestedAt: serverTimestamp(),
             status: "waiting"
         });
+        if (window.showToast) showToast("Request sent! Waiting for a midman.", "success");
         updateQueueInfo();
     });
 }
@@ -167,7 +177,9 @@ function listenToAdminQueue() {
                     <div class="queue-user">
                         <span class="queue-position"></span>
                         <span>${qd.username || qd.userEmail || qd.userId}</span>
-                        <input type="text" class="add-user-input" placeholder="Other User UID or Email" style="margin-left:1em; width: 180px;">
+                        <span style="color:#00C2FF; margin-left:0.5em;">wants to trade with:</span>
+                        <span class="queue-username" style="color:#A65EFF; font-weight:600;">${qd.otherUsername || '[Not specified]'}</span>
+                        <input type="text" class="add-user-input" placeholder="Other User Username" style="margin-left:1em; width: 180px;" value="${qd.otherUsername || ''}">
                         <button class="accept-btn" data-id="${docSnap.id}"><i class="fas fa-check"></i> Accept</button>
                         <button class="cancel-btn" data-id="${docSnap.id}"><i class="fas fa-times"></i> Cancel</button>
                     </div>
@@ -182,7 +194,7 @@ function listenToAdminQueue() {
                     const otherUserIdentifier = input ? input.value.trim() : "";
 
                     if (!otherUserIdentifier) {
-                        alert("Please enter the other user's UID or email.");
+                        if (window.showToast) showToast("Please enter the other user's username.", "error");
                         return;
                     }
 
@@ -197,7 +209,7 @@ function listenToAdminQueue() {
                         otherUserName = docSnap.data().username;
                     }
                     if (!otherUserUid) {
-                        alert("Other user not found.");
+                        if (window.showToast) showToast("Other user not found.", "error");
                         return;
                     }
 
@@ -212,7 +224,7 @@ function listenToAdminQueue() {
                     const qd = queueSnap.data();
 
                     // Create trade room with requester, other user, and midman
-                    await addDoc(collection(db, "tradeRooms"), {
+                    const tradeRoomDoc = await addDoc(collection(db, "tradeRooms"), {
                         participants: [qd.userId, otherUserUid, currentUser.uid],
                         traders: [
                             { uid: qd.userId, username: qd.username || qd.userEmail || qd.userId, items: [] },
@@ -222,19 +234,73 @@ function listenToAdminQueue() {
                         status: "active",
                         createdAt: serverTimestamp()
                     });
-                    alert("Trade room created!");
+                    // Notify requester
+                    await addDoc(collection(db, "notifications"), {
+                        userId: qd.userId,
+                        type: "tradeRoomReady",
+                        tradeRoomId: tradeRoomDoc.id,
+                        tradeRoomCreatedAt: serverTimestamp(),
+                        fromMidman: currentUser.displayName || currentUser.email,
+                        message: `Your trade room is ready!`,
+                        read: false,
+                        createdAt: serverTimestamp()
+                    });
+                    // Notify other user
+                    await addDoc(collection(db, "notifications"), {
+                        userId: otherUserUid,
+                        type: "tradeRoomReady",
+                        tradeRoomId: tradeRoomDoc.id,
+                        tradeRoomCreatedAt: serverTimestamp(),
+                        fromMidman: currentUser.displayName || currentUser.email,
+                        message: `Your trade room is ready!`,
+                        read: false,
+                        createdAt: serverTimestamp()
+                    });
+                    if (window.showToast) showToast("Trade room created! Both users have been notified.", "success");
                 };
             });
             adminQueueList.querySelectorAll('.cancel-btn').forEach(btn => {
                 btn.onclick = async () => {
                     const queueId = btn.getAttribute('data-id');
-                    if (confirm("Cancel this request?")) {
+                    if (window.showConfirm) {
+                        showConfirm("Cancel this request?", async () => {
+                            await updateDoc(doc(db, "midmanQueue", queueId), {
+                                status: "cancelled",
+                                cancelledAt: serverTimestamp()
+                            });
+                            if (window.showToast) showToast("Request cancelled.", "success");
+                        });
+                    } else {
+                        // fallback
                         await updateDoc(doc(db, "midmanQueue", queueId), {
                             status: "cancelled",
                             cancelledAt: serverTimestamp()
                         });
+                        if (window.showToast) showToast("Request cancelled.", "success");
                     }
                 };
+            });
+        }
+    });
+}
+
+function loadTradeRooms() {
+    const tradeRoomsRef = collection(db, "tradeRooms");
+    const q = query(tradeRoomsRef, where("participants", "array-contains", currentUser.uid));
+    const friendsUl = document.getElementById("friends-ul");
+    if (window.tradeRoomsUnsub) window.tradeRoomsUnsub();
+    window.tradeRoomsUnsub = onSnapshot(q, (snap) => {
+        friendsUl.innerHTML = "";
+        if (snap.empty) {
+            friendsUl.innerHTML = "<li>No trade rooms.</li>";
+        } else {
+            snap.forEach(docSnap => {
+                const room = docSnap.data();
+                const li = document.createElement("li");
+                li.textContent = `Trade Room (${room.traders.map(t => t.username).join(" vs ")})`;
+                li.onclick = () => selectTradeRoom(docSnap.id, room);
+                li.dataset.roomid = docSnap.id;
+                friendsUl.appendChild(li);
             });
         }
     });

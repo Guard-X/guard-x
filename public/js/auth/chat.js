@@ -224,6 +224,11 @@ function selectTradeRoom(roomId, roomData) {
         delRoomBtn.style.marginLeft = "1em";
         delRoomBtn.onclick = async () => {
             if (confirm("Are you sure you want to delete this trade room? This cannot be undone.")) {
+                // Unsubscribe from the messages listener BEFORE deleting
+                if (unsubscribeChat) {
+                    unsubscribeChat();
+                    unsubscribeChat = null;
+                }
                 await deleteDoc(doc(db, "tradeRooms", roomId));
                 document.getElementById("chat-with").textContent = "";
                 document.getElementById("chat-messages").innerHTML = "";
@@ -269,6 +274,11 @@ function loadTradeRoomMessages(roomId, roomData) {
 
     const q = query(messagesRef, orderBy("createdAt", "asc"));
     unsubscribeChat = onSnapshot(q, (snap) => {
+        // If the room is deleted, snap.empty will be true and snap.metadata.fromCache will be true
+        if (snap.empty && snap.metadata.fromCache) {
+            chatMessagesDiv.innerHTML = "<div>This trade room has been deleted.</div>";
+            return;
+        }
         chatMessagesDiv.innerHTML = "";
         snap.forEach(docSnap => {
             const msg = docSnap.data();
@@ -305,5 +315,8 @@ function loadTradeRoomMessages(roomId, roomData) {
             chatMessagesDiv.appendChild(div);
         });
         chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight;
+    }, (error) => {
+        // Handle permission errors gracefully
+        chatMessagesDiv.innerHTML = "<div>This trade room has been deleted or you no longer have access.</div>";
     });
 }

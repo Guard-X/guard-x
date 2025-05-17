@@ -103,11 +103,14 @@ async function fetchNotifications() {
             notificationQueue.push({
                 id: docSnap.id,
                 type: n.type,
-                tradeId: n.tradeId,
+                tradeId: n.tradeId || "",
                 commentId: n.commentId || "",
-                msg: n.type === "comment"
-                    ? `<b>${n.fromUser}</b> commented: "${n.commentText}"`
-                    : `<b>${n.fromUser}</b> replied: "${n.replyText}"`,
+                fromUser: n.fromUser || "",
+                fromMidman: n.fromMidman || "",
+                commentText: n.commentText || "",
+                replyText: n.replyText || "",
+                tradeRoomId: n.tradeRoomId || "",
+                message: n.message || "",
                 createdAt: n.createdAt?.toDate ? n.createdAt.toDate().toLocaleString() : "",
                 read: n.read
             });
@@ -115,12 +118,23 @@ async function fetchNotifications() {
         });
 
         notificationQueue.forEach(n => {
+            let msg = "";
+            if (n.type === "comment") {
+                msg = `<b>${n.fromUser}</b> commented: "${n.commentText}"`;
+            } else if (n.type === "reply") {
+                msg = `<b>${n.fromUser}</b> replied: "${n.replyText}"`;
+            } else if (n.type === "tradeRoomReady") {
+                msg = `<b>${n.fromMidman || "Midman"}</b> created your trade room! <br><button class="go-to-chat-btn" data-roomid="${n.tradeRoomId || ""}">Go to Trade Room</button>`;
+            } else {
+                msg = n.message || "You have a new notification.";
+            }
+
             notificationList.innerHTML += `<div class='notification-item${n.read ? " read" : ""}' 
                 data-id="${n.id}" 
                 data-type="${n.type}" 
                 data-tradeid="${n.tradeId}" 
                 data-commentid="${n.commentId}">
-                ${n.msg}<br>
+                ${msg}<br>
                 <small>${n.createdAt}</small>
             </div>`;
         });
@@ -136,7 +150,7 @@ async function fetchNotifications() {
 
     // Add click listeners for each notification
     notificationList.querySelectorAll('.notification-item').forEach(item => {
-        item.addEventListener('click', async function() {
+        item.addEventListener('click', async function(e) {
             const notifId = this.getAttribute('data-id');
             const type = this.getAttribute('data-type');
             const tradeId = this.getAttribute('data-tradeid');
@@ -154,6 +168,19 @@ async function fetchNotifications() {
                 window.location.href = `trade.html?tradeId=${tradeId}&commentId=${commentId}`;
             } else if (type === "reply") {
                 window.location.href = `trade.html?tradeId=${tradeId}&commentId=${commentId}&reply=1`;
+            }
+        });
+    });
+
+    // Handle "Go to Trade Room" button clicks
+    notificationList.querySelectorAll('.go-to-chat-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const roomId = btn.getAttribute('data-roomid');
+            if (roomId) {
+                window.location.href = `chat.html?room=${roomId}`;
+            } else {
+                window.location.href = "chat.html";
             }
         });
     });
