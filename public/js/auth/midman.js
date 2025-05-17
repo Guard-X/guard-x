@@ -201,10 +201,10 @@ function listenToAdminQueue() {
                     // Find the other user by username
                     let otherUserUid = null, otherUserName = "";
                     const usersRef = collection(db, "users");
-                    const q = query(usersRef, where("username", "==", otherUserIdentifier));
-                    const snap = await getDocs(q);
-                    if (!snap.empty) {
-                        const docSnap = snap.docs[0];
+                    const userQ = query(usersRef, where("username", "==", otherUserIdentifier));
+                    const userSnap = await getDocs(userQ);
+                    if (!userSnap.empty) {
+                        const docSnap = userSnap.docs[0];
                         otherUserUid = docSnap.id;
                         otherUserName = docSnap.data().username;
                     }
@@ -234,6 +234,7 @@ function listenToAdminQueue() {
                         status: "active",
                         createdAt: serverTimestamp()
                     });
+
                     // Notify requester
                     await addDoc(collection(db, "notifications"), {
                         userId: qd.userId,
