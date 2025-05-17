@@ -20,6 +20,7 @@ const commentsCollectionRef = collection(db, "comments");
 
 let currentTradeId = null;
 let currentUserId = null;
+let allTradesCache = [];
 
 // Display all trade posts except current user's
 const displayAllTradePosts = async (userId) => {
@@ -30,6 +31,8 @@ const displayAllTradePosts = async (userId) => {
         const tradePostsList = document.getElementById("trade-posts-list");
         tradePostsList.innerHTML = '';
 
+        allTradesCache = []; // Reset cache
+
         if (querySnapshot.empty) {
             tradePostsList.innerHTML = '<div class="no-trades"><i class="fas fa-info-circle"></i> No trade posts available from other users.</div>';
             return;
@@ -37,31 +40,10 @@ const displayAllTradePosts = async (userId) => {
 
         querySnapshot.forEach((docSnap) => {
             const tradeData = docSnap.data();
-            const tradeElement = document.createElement("div");
-            tradeElement.classList.add("trade-post");
-
-            const priceDisplay = tradeData.price
-                ? `<div class="price-tag">${tradeData.price}</div>`
-                : '';
-
-            const createdAt = tradeData.createdAt?.toDate ? tradeData.createdAt.toDate() : new Date();
-
-            tradeElement.innerHTML = `
-                <h3>${tradeData.gameName || 'Unknown Game'}</h3>
-                <div class="game-name">${tradeData.itemName || ''}</div>
-                ${priceDisplay}
-                <div class="description">${tradeData.description || ''}</div>
-                <div class="trade-meta">
-                    <span class="user"><i class="fas fa-user"></i> ${tradeData.userEmail || 'Anonymous'}</span>
-                    <span class="date"><i class="fas fa-clock"></i> ${createdAt.toLocaleString()}</span>
-                </div>
-                <button class="comment-btn" data-tradeid="${docSnap.id}">
-                    <i class="fas fa-comments"></i> Comments
-                </button>
-            `;
-            tradePostsList.appendChild(tradeElement);
+            allTradesCache.push({ id: docSnap.id, ...tradeData });
         });
 
+        renderTradePosts(allTradesCache);
         setupTradeButtons();
     } catch (error) {
         console.error("Error fetching trade posts:", error);
@@ -69,6 +51,42 @@ const displayAllTradePosts = async (userId) => {
             '<div class="no-trades"><i class="fas fa-exclamation-triangle"></i> Error loading trade posts. Please try again.</div>';
     }
 };
+
+// Render trades from a given array
+function renderTradePosts(trades) {
+    const tradePostsList = document.getElementById("trade-posts-list");
+    tradePostsList.innerHTML = '';
+    if (!trades.length) {
+        tradePostsList.innerHTML = '<div class="no-trades"><i class="fas fa-info-circle"></i> No trade posts match your search.</div>';
+        return;
+    }
+    trades.forEach(tradeData => {
+        const tradeElement = document.createElement("div");
+        tradeElement.classList.add("trade-post");
+
+        const priceDisplay = tradeData.price
+            ? `<div class="price-tag">${tradeData.price}</div>`
+            : '';
+
+        const createdAt = tradeData.createdAt?.toDate ? tradeData.createdAt.toDate() : new Date();
+
+        tradeElement.innerHTML = `
+            <h3>${tradeData.gameName || 'Unknown Game'}</h3>
+            <div class="game-name">${tradeData.itemName || ''}</div>
+            ${priceDisplay}
+            <div class="description">${tradeData.description || ''}</div>
+            <div class="trade-meta">
+                <span class="user"><i class="fas fa-user"></i> ${tradeData.userEmail || 'Anonymous'}</span>
+                <span class="date"><i class="fas fa-clock"></i> ${createdAt.toLocaleString()}</span>
+            </div>
+            <button class="comment-btn" data-tradeid="${tradeData.id}">
+                <i class="fas fa-comments"></i> Comments
+            </button>
+        `;
+        tradePostsList.appendChild(tradeElement);
+    });
+    setupTradeButtons();
+}
 
 // Setup trade action buttons
 const setupTradeButtons = () => {
@@ -285,4 +303,18 @@ document.addEventListener("DOMContentLoaded", () => {
         currentUserId = user.uid;
         displayAllTradePosts(user.uid);
     });
+
+    // Search functionality
+    const searchInput = document.getElementById('search-games');
+    if (searchInput) {
+        searchInput.addEventListener('input', function () {
+            const query = this.value.trim().toLowerCase();
+            const filtered = allTradesCache.filter(trade =>
+                (trade.gameName && trade.gameName.toLowerCase().includes(query)) ||
+                (trade.itemName && trade.itemName.toLowerCase().includes(query)) ||
+                (trade.description && trade.description.toLowerCase().includes(query))
+            );
+            renderTradePosts(filtered);
+        });
+    }
 });
